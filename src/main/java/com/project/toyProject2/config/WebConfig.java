@@ -13,7 +13,8 @@ public class WebConfig {
 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/member/login", "/member/join", "/css/**", "/js/**").permitAll() // 로그인/회원가입 페이지는 모두 접근 가능
+                    .requestMatchers("/","/member/login", "/member/join", "/css/**", "/js/**")
+                    .permitAll()
                     .anyRequest().authenticated() // 나머지 요청은 인증 필요
             )
             .formLogin(form -> form
@@ -21,7 +22,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                     .loginProcessingUrl("/member/login")   //POST 로그인 처리
                     .usernameParameter("memberLoginId")
                     .passwordParameter("memberPassword")
-                    .defaultSuccessUrl("/", true)   //로그인 성공 시 이동
+                    .defaultSuccessUrl("/", true)   //로그인 성공 시 경로 수정해야함 **
             )
             .logout(logout -> logout
                     .logoutUrl("/logout")

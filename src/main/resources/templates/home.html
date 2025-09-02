@@ -7,5 +7,15 @@
    </head>
        <body>
             <h6>home</h6>
+            <form action=""  th:object="${loginUser}">
+                <div th:if="${loginUser}!=null">
+                    로그인 유저:<h2 th:text="*{getUsername()}"></h2>
+                    세션 ID:<h2 th:text="*{getMember().memberId}"></h2>
+                </div>
+                <div th:unless="${loginUser}!=null">
+                    <h2>로그인 후 이용해주세요.</h2>
+                    <a th:href="@{/member/login}">로그인</a>
+                </div>
+            </form>
        </body>
    </html>

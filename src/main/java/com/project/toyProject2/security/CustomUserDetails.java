@@ -1,6 +1,7 @@
 package com.project.toyProject2.security;
 
 import com.project.toyProject2.domain.member.MemberVO;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Data
 @Slf4j
 public class CustomUserDetails implements UserDetails {
     private final MemberVO member;
