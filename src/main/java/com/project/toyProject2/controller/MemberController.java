@@ -25,4 +25,9 @@ public class MemberController {
         memberService.join(memberVO);
         return "redirect:/member/list";
     }
+    @GetMapping("/login")
+    public String login(Model model) {
+        model.addAttribute("memberVO", new MemberVO());
+        return "member/login";
+    }
 }
