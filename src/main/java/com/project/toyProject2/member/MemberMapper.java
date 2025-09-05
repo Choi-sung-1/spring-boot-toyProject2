@@ -1,6 +1,5 @@
-package com.project.toyProject2.mapper.member;
+package com.project.toyProject2.member;
 
-import com.project.toyProject2.domain.member.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Optional;

@@ -1,7 +1,5 @@
-package com.project.toyProject2.controller;
+package com.project.toyProject2.member;
 
-import com.project.toyProject2.domain.member.MemberVO;
-import com.project.toyProject2.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

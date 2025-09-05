@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.project.toyProject2.mapper")
+@MapperScan("com.project.toyProject2")
 
 public class ToyProject2Application {
 

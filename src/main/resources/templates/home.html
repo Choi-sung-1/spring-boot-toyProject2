@@ -1,21 +1,22 @@
  <!DOCTYPE HTML>
    <html xmlns:th="http://www.thymeleaf.org">
-   <head>
-       <meta charset="utf-8">
-       <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
-       <title>HOME</title>
-   </head>
-       <body>
-            <h6>home</h6>
-            <form action=""  th:object="${loginUser}">
-                <div th:if="${loginUser}!=null">
-                    로그인 유저:<h2 th:text="*{getUsername()}"></h2>
-                    세션 ID:<h2 th:text="*{getMember().memberId}"></h2>
-                </div>
-                <div th:unless="${loginUser}!=null">
-                    <h2>로그인 후 이용해주세요.</h2>
-                    <a th:href="@{/member/login}">로그인</a>
-                </div>
-            </form>
-       </body>
-   </html>
+ <head>
+     <meta charset="UTF-8">
+     <title>쇼핑몰 홈</title>
+ </head>
+     <body>
+         <h1>🛍️ 쇼핑몰</h1>
+         <nav>
+             <a href="/products">상품 목록</a> |
+             <a href="/cart">장바구니</a> |
+             <a href="/orders">주문 내역</a>
+         </nav>
+         <div th:if="${loginUser}==null">
+             <p>환영합니다! 원하는 상품을 둘러보세요.</p>
+             <p><a th:href="@{/member/login}">로그인</a> 후 이용해주세요.</p>
+         </div>
+         <div th:if="${loginUser}!=null">
+             <p>환영합니다 <span th:text="${loginUser.getUsername()}">USERNAME</span>님! 원하는 상품을 둘러보세요.</p>
+         </div>
+     </body>
+ </html>

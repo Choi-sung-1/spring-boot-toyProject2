@@ -1,8 +1,7 @@
-package com.project.toyProject2.controller;
+package com.project.toyProject2.home;
 
 import com.project.toyProject2.security.CustomUserDetails;
 import jakarta.servlet.http.HttpSession;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;

@@ -1,9 +1,6 @@
-package com.project.toyProject2.service.member;
+package com.project.toyProject2.member;
 
-import com.project.toyProject2.domain.member.MemberVO;
-import com.project.toyProject2.repository.member.MemberDAO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.project.toyProject2.mapper.member.MemberMapper">
-    <insert id="insert" parameterType="com.project.toyProject2.domain.member.MemberVO" keyProperty="memberId" useGeneratedKeys="true">
+<mapper namespace="com.project.toyProject2.member.MemberMapper">
+    <insert id="insert" parameterType="com.project.toyProject2.member.MemberVO" keyProperty="memberId" useGeneratedKeys="true">
         INSERT INTO TBL_MEMBER(MEMBER_LOGIN_ID, MEMBER_PASSWORD, MEMBER_NAME, MEMBER_ROLE, MEMBER_REGISTER_DATE, MEMBER_UPDATE_DATE)
         VALUES (#{memberLoginId},#{memberPassword},#{memberName},#{memberRole},#{memberRegisterDate},#{memberUpdateDate})
     </insert>

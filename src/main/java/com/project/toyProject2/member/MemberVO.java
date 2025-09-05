@@ -1,4 +1,4 @@
-package com.project.toyProject2.domain.member;
+package com.project.toyProject2.member;
 
 import lombok.Data;
 
