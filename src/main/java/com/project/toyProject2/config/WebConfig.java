@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 @Configuration
 public class WebConfig {
@@ -13,18 +15,27 @@ public class WebConfig {
 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/","/member/login", "/member/join", "/css/**", "/js/**")
+                    .requestMatchers("/", "/member/login","product/detail/*", "/product/list", "/member/join", "/css/**", "/js/**")
                     .permitAll()
                     .anyRequest().authenticated() // 나머지 요청은 인증 필요
-            )
-            .formLogin(form -> form
-                    .loginPage("/member/login")        //GET 로그인 페이지
-                    .loginProcessingUrl("/member/login")   //POST 로그인 처리
+            ).formLogin(form -> form
+                    .loginPage("/member/login")
+                    .loginProcessingUrl("/member/login")
                     .usernameParameter("memberLoginId")
                     .passwordParameter("memberPassword")
-                    .defaultSuccessUrl("/", true)   //로그인 성공 시 경로 수정해야함 **
-            )
-            .logout(logout -> logout
+                    .successHandler((request, response, authentication) -> {
+                        // 로그인 성공 시 원래 요청한 URI로 이동
+                        SavedRequest savedRequest =
+                                new HttpSessionRequestCache().getRequest(request, response);
+
+                        if (savedRequest != null) {
+                            String targetUrl = savedRequest.getRedirectUrl();
+                            response.sendRedirect(targetUrl);
+                        } else {
+                            response.sendRedirect("/"); // 기본 경로
+                        }
+                    })
+            ).logout(logout -> logout
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/login")
             );
