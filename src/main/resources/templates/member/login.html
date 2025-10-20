@@ -13,7 +13,9 @@
         <input type="text" name="memberLoginId" th:field="*{memberLoginId}" placeholder="아이디" required>
         <input type="password" name="memberPassword" th:field="*{memberPassword}" placeholder="비밀번호" required>
         <button type="submit">로그인</button>
+
     </form>
+    <a th:href="@{/member/join}">회원가입</a>
 
 </div>
 </body>

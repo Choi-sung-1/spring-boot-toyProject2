@@ -1,34 +1,121 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>장바구니</title>
 </head>
 <body>
-<h1>장바구니</h1>
-<table border="1">
+
+<h1>🛒 장바구니</h1>
+<a href="/product/list">← 상품 목록으로</a>
+<hr>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="8">
     <thead>
     <tr>
+        <th>상품 이미지</th>
         <th>상품명</th>
         <th>가격</th>
         <th>수량</th>
-        <th>총액</th>
+        <th>합계</th>
         <th>삭제</th>
     </tr>
     </thead>
     <tbody>
-    <!-- 반복문으로 상품 출력 -->
-    <tr>
-        <td>청바지</td>
-        <td>30000원</td>
-        <td>2</td>
-        <td>60000원</td>
-        <td><a href="/cart/remove/1">삭제</a></td>
+    <!-- 상품 1 -->
+    <tr th:each="item:${cartList}" id="tableRow">
+        <td>
+            <figure>
+                <img th:src="@{|/productImages/${item.imageOriginalName}|}" alt="무선 이어폰 V1" width="100">
+                <figcaption th:text="${item.productName}">V1 이어폰</figcaption>
+            </figure>
+        </td>
+        <td id="productName" th:text="${item.productName}">무선 이어폰 V1</td>
+        <td id="productPrice" th:text="${item.formatProductPrice()}">₩79,000</td>
+        <td><input id="productSelect" type="number" th:value="${item.cartQuantity}" min="1" th:max="${item.productStock}"></td>
+        <td id="productTotalPrice" th:text="${item.formatTotalPrice()}"></td>
+        <td><button id="productDelBtn" type="button">삭제</button></td>
+        <td hidden="hidden"><input id="cartId" name="cartId" th:text="*{item.cartId}"/></td>
+
     </tr>
     </tbody>
 </table>
-<form action="/orders" method="post">
-    <button type="submit">주문하기</button>
-</form>
+
+<hr>
+
+<!-- 총합 영역 -->
+<section>
+    <h3>결제 정보</h3>
+    <p id="allProductPrice">상품 합계: ₩149,000</p>
+    <p>배송비: ₩3,000</p>
+    <p><strong id="amount">총 결제 금액: ₩152,000</strong></p>
+    <button id="paymentBtn" type="button">결제하기</button>
+    <button id="rmvCartBtn" type="button" onclick="onClickRmvBtn()">장바구니 비우기</button>
+</section>
+
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll("tbody tr");
+
+        rows.forEach(row => {
+            const priceCell = row.querySelector("td:nth-child(3)");
+            const qtyInput = row.querySelector("input[type='number']");
+            const totalCell = row.querySelector("td:nth-child(5)");
+            const delBtn = row.querySelector("td:nth-child(6)");
+
+            const price = parseInt(priceCell.textContent.replace(/[^0-9]/g, ""));
+
+            // 수량 변경될 때마다 합계 계산
+            qtyInput.addEventListener("input", () => {
+                const qty = parseInt(qtyInput.value);
+                const total = price * qty;
+                totalCell.textContent = `₩${total.toLocaleString()}`;
+                updateSummary(); // 총합도 다시 계산
+            });
+
+            delBtn.addEventListener("click",()=>{
+                confirm('해당 제품을 비우시겠습니까?')
+                const cartId = row.querySelector("td:nth-child(7)").innerText.trim();
+                console.log(cartId);
+                const cartBox = document.getElementById('tableRow');
+                fetch(`/order/delete/${cartId}`, {
+                    method: 'DELETE'
+                }).then(response=>{
+                    if (!response.ok){
+                        throw new Error("삭제 실패");
+                    }
+                    return response.json();
+                });
+                cartBox.remove();
+                updateSummary();
+            });
+        });
+
+        function updateSummary() {
+            let sum = 0;
+
+            document.querySelectorAll("tbody tr").forEach(row => {
+                const totalCell = row.querySelector("td:nth-child(5)");
+                const value = parseInt(totalCell.textContent.replace(/[^0-9]/g, "")) || 0;
+                sum += value;
+            });
+
+            const delivery = 3000;
+
+            document.getElementById("allProductPrice").textContent = `상품 합계: ₩${sum.toLocaleString()}`;
+            document.querySelector("section p:nth-of-type(2)").textContent = `배송비: ₩${delivery.toLocaleString()}`;
+            document.getElementById("amount").textContent = `총 결제 금액: ₩${(sum + delivery).toLocaleString()}`;
+        }
+        updateSummary(); // 초기 로드 시 한 번 계산
+
+    });
+    // 장바구니 비우기
+    document.getElementById('rmvCartBtn').addEventListener("click",()=>{
+        confirm('장바구니를 비우시겠습니까?');
+    });
+</script>
+
+
 </html>

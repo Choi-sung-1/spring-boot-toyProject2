@@ -1,5 +1,6 @@
-package com.project.toyProject2.member;
+package com.project.toyProject2.mapper;
 
+import com.project.toyProject2.domain.vo.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Optional;
@@ -8,6 +9,6 @@ import java.util.Optional;
 public interface MemberMapper {
 //    회원가입
     public void insert(MemberVO memberVO);
-//    로그인
+//    회원 조회
     public Optional<MemberVO> selectMemberById(String memberLoginId);
 }

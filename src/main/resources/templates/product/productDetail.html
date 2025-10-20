@@ -5,18 +5,140 @@
     <title>상품 상세</title>
 </head>
 <body>
-<h1>상품 상세</h1>
-<a href="/product/list">목록으로</a>
-<div>
-    <h2>상품명: 청바지</h2>
-    <p>가격: 30000원</p>
-    <p>설명: 편안한 데님 청바지</p>
-    <img src="/images/product/sample.jpg" alt="상품 이미지">
-</div>
-<form action="/cart/add" method="post">
-    <input type="hidden" name="productId" value="1">
-    <label>수량: <input type="number" name="quantity" value="1" min="1"></label>
-    <button type="submit">장바구니 담기</button>
+
+<!-- ===== 헤더 영역 ===== -->
+<header>
+    <h1>상품 상세</h1>
+    <nav>
+        <a th:href="@{/product/list}">목록으로</a>
+    </nav>
+
+    <!-- 로그인 상태 -->
+    <div th:if="${loginMember != null}">
+        <a th:href="@{/order/cart}">장바구니</a>
+        <h3 th:text="|권한 : ${loginMember.get().memberRole}|"></h3>
+        <h3 id="memberLoginId" th:text="|사용자 : ${loginMember.get().memberName}|"></h3>
+        <p hidden id="memberId" th:text="${loginMember.get().memberId}"></p>
+    </div>
+
+    <!-- 비로그인 상태 -->
+    <div th:if="${loginMember == null}">
+        <h3><a th:href="@{/member/login}">로그인</a> 후 이용해주세요.</h3>
+    </div>
+</header>
+
+<hr>
+
+<!-- ===== 상품 정보 영역 ===== -->
+<section th:object="${product}">
+    <input type="hidden" id="productId" th:value="*{productId}">
+    <h2 id="productName" th:text="*{productName}">상품명</h2>
+    <p>가격: <span id="productPrice" th:text="*{productPrice}">0</span>원</p>
+    <p>설명: <span th:text="*{productDescription}">상품 설명</span></p>
+
+    <!-- 상품 이미지 -->
+    <div th:if="${imagePaths != null}">
+        <div th:each="path : ${imagePaths}">
+            <img th:src="@{|/productImages/${path}|}" alt="상품 이미지" style="max-width:200px;">
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ===== 재고 및 구매 버튼 ===== -->
+<section>
+    <p>
+        남은 재고:
+        <input type="text" name="productStock" th:value="${product.productStock}" readonly>
+    </p>
+
+    <div id="buyMenu">
+        <button type="button">⭐️</button>
+        <button type="button" id="buyBtn">구매하기</button>
+    </div>
+</section>
+
+<!-- ===== 구매 메뉴 (토글 영역) ===== -->
+<form action="/order/cart" method="post" id="productMenu" hidden>
+    <input type="hidden" name="productId" th:value="*{productId}">
+
+    <label for="quantity">수량 선택:</label>
+    <select name="quantity" id="quantity" required>
+        <option value="">-- 수량 선택 --</option>
+        <option th:each="i : ${#numbers.sequence(1, product.productStock)}"
+                th:value="${i}" th:text="|${i}개|"></option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">구매하기</button>
+    <button type="button" id="cartBtn" onclick="onClickCartBtn()">장바구니 담기</button>
 </form>
+
+<hr>
+
+<!-- ===== 관리자 전용 영역 ===== -->
+<section th:if="${loginMember != null and loginMember.get().memberRole == 'ADMIN'}">
+    <form th:action="@{/product/delete/{productId}(productId=${product.productId})}" method="post"
+          onsubmit="return confirm('정말 삭제하시겠습니까?')">
+        <button type="submit">상품 삭제</button>
+    </form>
+</section>
+
+<!-- ===== 스크립트 ===== -->
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        const buyBtn = document.getElementById("buyBtn");
+        const productMenu = document.getElementById("productMenu");
+        const buyMenu = document.getElementById("buyMenu");
+
+        // 로그인 여부 확인
+        const isLogin = /*[[${loginMember != null}]]*/ false;
+
+        buyBtn.addEventListener("click", () => {
+            if (!isLogin) {
+                alert("로그인 후 이용해주세요.");
+                window.location.href = /*[[@{/member/login}]]*/ "/member/login";
+                return;
+            }
+            productMenu.hidden = !productMenu.hidden;
+            buyMenu.hidden = !buyMenu.hidden;
+        });
+    });
+
+    // 장바구니 버튼 클릭 시
+    function onClickCartBtn() {
+        const productId = document.getElementById("productId").value;
+        const productName = document.getElementById("productName")?.innerText || "";
+        const memberId = document.getElementById("memberId").innerText.trim();
+        const quantity = document.getElementById("quantity").value;
+
+        if (!quantity) {
+            alert("수량을 선택해주세요!");
+            return;
+        }
+
+        if (!confirm(`'${productName}' 상품을 ${quantity}개 장바구니에 추가하시겠습니까?`)) return;
+
+        fetch("/order/cart", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ productId, memberId, quantity })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(msg => { throw new Error(msg) });
+                }
+                return response.text();
+            })
+            .then(msg => {
+                alert(msg); // 장바구니에 상품이 추가되었습니다.
+            })
+            .catch(err => {
+                alert(err.message); // 이미 장바구니에 담긴 상품입니다.
+            });
+    }
+</script>
 </body>
 </html>

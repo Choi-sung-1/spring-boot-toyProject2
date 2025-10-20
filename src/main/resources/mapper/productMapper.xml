@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.toyProject2.mapper.ProductMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO TBL_PRODUCT(PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_PRICE, PRODUCT_STOCK)
+        VALUES ( #{productName},#{productDescription},#{productPrice},#{productStock})
+    </insert>
+    <select id="selectById">
+        SELECT * FROM TBL_PRODUCT WHERE PRODUCT_ID=#{productId}
+    </select>
+
+        <select id="selectAll" resultType="com.project.toyProject2.domain.vo.ProductVO">
+            SELECT * FROM TBL_PRODUCT
+        </select>
+    <update id="update">
+    </update>
+    <delete id="delete">
+        DELETE FROM TBL_PRODUCT WHERE PRODUCT_ID=#{productID}
+    </delete>
+
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.toyProject2.mapper.ImageMapper">
+    <insert id="insert" keyProperty="imageId" useGeneratedKeys="true">
+        INSERT INTO TBL_IMAGES(IMAGE_ORIGINAL_NAME, IMAGE_PATH, IMAGE_TYPE, PRODUCT_ID)
+        VALUES ( #{imageOriginalName},#{imagePath},#{imageType},#{productId} )
+    </insert>
+    <select id="selectImages">
+        select * from TBL_IMAGES WHERE PRODUCT_ID=#{productId}
+    </select>
+    <delete id="delete">
+        DELETE FROM TBL_IMAGES
+        WHERE PRODUCT_ID=#{productId}
+    </delete>
+</mapper>

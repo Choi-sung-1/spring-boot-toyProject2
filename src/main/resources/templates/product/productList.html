@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>상품 목록</title>
 </head>
 <body>
 <h1>상품 목록</h1>
-<a href="/">홈으로</a>
-<table border="1">
+<div th:if="${loginMember}!=null">
+    <h4 th:text="|로그인 사용자: ${loginMember.get().memberName}|">사용자</h4>
+    <h4 th:text="|권한 : ${loginMember.get().memberRole}|"></h4>
+    <a th:href="@{/order/cart}">장바구니</a>
+
+</div>
+<div th:if="${loginMember}==null">
+    <h4>
+        <a th:href="@{/member/login}"><로그인></로그인></a> 후 이용해주세요.
+    </h4>
+</div>
+<a th:href="@{/}">홈으로</a>
+<table border="1" th:object="${products}">
     <thead>
     <tr>
         <th>상품번호</th>
@@ -18,14 +29,20 @@
     </thead>
     <tbody>
     <!-- 반복문으로 출력 -->
-    <tr>
-        <td>1</td>
-        <td>청바지</td>
-        <td>30000원</td>
-        <td><a href="/product/detail/1">보기</a></td>
+    <tr id="productListBox" th:each="product :${products}" th:attr="data-product-id=${product.productId}">
+        <td th:text="${product.productId}">1</td>
+        <td th:text="${product.productName}">청바지</td>
+        <td th:text="${product.formatProductPrice()}">30000원</td>
+        <td><a th:href="@{/product/detail/{productId}(productId=${product.productId})}">보기</a></td>
+
+
     </tr>
     </tbody>
 </table>
-<a href="/product/form">상품 등록 (관리자)</a>
+<div sec:authorize="hasRole('ADMIN')">
+    <a th:href="@{/product/form}">상품 등록 (관리자)</a>
+</div>
+
+
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.project.toyProject2.security;
 
-import com.project.toyProject2.member.MemberVO;
-import com.project.toyProject2.member.MemberDAO;
+import com.project.toyProject2.domain.vo.MemberVO;
+import com.project.toyProject2.repository.MemberDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

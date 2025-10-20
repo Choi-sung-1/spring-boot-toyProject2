@@ -1,6 +1,6 @@
 package com.project.toyProject2.security;
 
-import com.project.toyProject2.member.MemberVO;
+import com.project.toyProject2.domain.vo.MemberVO;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;

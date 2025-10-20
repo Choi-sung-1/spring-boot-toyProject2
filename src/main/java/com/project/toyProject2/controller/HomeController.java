@@ -1,4 +1,4 @@
-package com.project.toyProject2.home;
+package com.project.toyProject2.controller;
 
 import com.project.toyProject2.security.CustomUserDetails;
 import jakarta.servlet.http.HttpSession;

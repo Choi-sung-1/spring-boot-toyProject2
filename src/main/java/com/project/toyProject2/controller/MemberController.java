@@ -1,5 +1,7 @@
-package com.project.toyProject2.member;
+package com.project.toyProject2.controller;
 
+import com.project.toyProject2.service.MemberService;
+import com.project.toyProject2.domain.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +23,7 @@ public class MemberController {
     @PostMapping("/join")
     public String join(MemberVO memberVO) {
         memberService.join(memberVO);
-        return "redirect:/member/list";
+        return "redirect:/";
     }
     @GetMapping("/login")
     public String login(Model model) {

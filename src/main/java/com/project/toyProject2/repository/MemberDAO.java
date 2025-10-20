@@ -1,5 +1,7 @@
-package com.project.toyProject2.member;
+package com.project.toyProject2.repository;
 
+import com.project.toyProject2.mapper.MemberMapper;
+import com.project.toyProject2.domain.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +15,7 @@ public class MemberDAO {
     public void insert(MemberVO memberVO) {
         memberMapper.insert(memberVO);
     }
-//    로그인
+//    회원 조회
     public Optional<MemberVO> selectMemberById(String memberLoginId) {
         return memberMapper.selectMemberById(memberLoginId);
     }
