@@ -14,11 +14,11 @@
 </div>
 <div th:if="${loginMember}==null">
     <h4>
-        <a th:href="@{/member/login}"><로그인></로그인></a> 후 이용해주세요.
+        <a th:href="@{/member/login}">로그인</a> 후 이용해주세요.
     </h4>
 </div>
 <a th:href="@{/}">홈으로</a>
-<table border="1" th:object="${products}">
+<table th:object="${products}">
     <thead>
     <tr>
         <th>상품번호</th>
