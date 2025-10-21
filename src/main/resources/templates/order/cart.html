@@ -9,9 +9,15 @@
 
 <h1>🛒 장바구니</h1>
 <a href="/product/list">← 상품 목록으로</a>
+<p hidden="hidden" id="memberId" th:text="${loginMember.get().memberId}"></p>
 <hr>
 
-<table border="1" width="100%" cellspacing="0" cellpadding="8">
+<div th:attr="hidden=${!cartList.isEmpty()}" id="emptyCartMessage" style="text-align:center; padding:30px;">
+    🛒 장바구니가 비어 있습니다.<br>
+    상품을 추가해보세요!
+</div>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="8" th:if="${!cartList.isEmpty()}" id="cartListTable">
     <thead>
     <tr>
         <th>상품 이미지</th>
@@ -22,8 +28,8 @@
         <th>삭제</th>
     </tr>
     </thead>
-    <tbody>
-    <!-- 상품 1 -->
+
+    <tbody id="tableBody">
     <tr th:each="item:${cartList}" id="tableRow">
         <td>
             <figure>
@@ -37,7 +43,6 @@
         <td id="productTotalPrice" th:text="${item.formatTotalPrice()}"></td>
         <td><button id="productDelBtn" type="button">삭제</button></td>
         <td hidden="hidden"><input id="cartId" name="cartId" th:text="*{item.cartId}"/></td>
-
     </tr>
     </tbody>
 </table>
@@ -51,35 +56,40 @@
     <p>배송비: ₩3,000</p>
     <p><strong id="amount">총 결제 금액: ₩152,000</strong></p>
     <button id="paymentBtn" type="button">결제하기</button>
-    <button id="rmvCartBtn" type="button" onclick="onClickRmvBtn()">장바구니 비우기</button>
+    <button id="rmvCartBtn" type="button">장바구니 비우기</button>
 </section>
 
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+
+        //  기능별 함수로 분리하기 -->실무 필요
         const rows = document.querySelectorAll("tbody tr");
 
         rows.forEach(row => {
-            const priceCell = row.querySelector("td:nth-child(3)");
-            const qtyInput = row.querySelector("input[type='number']");
-            const totalCell = row.querySelector("td:nth-child(5)");
+            const productPrice = row.querySelector("td:nth-child(3)");
+            const productNumber = row.querySelector("input[type='number']");
+            const totalPrice = row.querySelector("td:nth-child(5)");
             const delBtn = row.querySelector("td:nth-child(6)");
 
-            const price = parseInt(priceCell.textContent.replace(/[^0-9]/g, ""));
+            const price = parseInt(productPrice.textContent.replace(/[^0-9]/g, ""));
 
             // 수량 변경될 때마다 합계 계산
-            qtyInput.addEventListener("input", () => {
-                const qty = parseInt(qtyInput.value);
+            productNumber.addEventListener("input", () => {
+                const qty = parseInt(productNumber.value);
                 const total = price * qty;
-                totalCell.textContent = `₩${total.toLocaleString()}`;
+                totalPrice.textContent = `₩${total.toLocaleString()}`;
                 updateSummary(); // 총합도 다시 계산
             });
 
+            // 제품 한개 삭제
             delBtn.addEventListener("click",()=>{
-                confirm('해당 제품을 비우시겠습니까?')
+                if (!confirm("해당 제품을 비우시겠습니까??")) {
+                    return;
+                }
                 const cartId = row.querySelector("td:nth-child(7)").innerText.trim();
-                console.log(cartId);
-                const cartBox = document.getElementById('tableRow');
+                const emptyCartDiv = document.getElementById('emptyCartMessage');
+
                 fetch(`/order/delete/${cartId}`, {
                     method: 'DELETE'
                 }).then(response=>{
@@ -88,8 +98,15 @@
                     }
                     return response.json();
                 });
-                cartBox.remove();
+                row.remove();
                 updateSummary();
+                const carListTable = document.getElementById('cartListTable');
+                const remainRows = document.querySelectorAll("tbody tr").length;
+                console.log(remainRows);
+                if (remainRows===0){
+                    emptyCartDiv.hidden = false;
+                    carListTable.hidden = true;
+                }
             });
         });
 
@@ -113,7 +130,22 @@
     });
     // 장바구니 비우기
     document.getElementById('rmvCartBtn').addEventListener("click",()=>{
-        confirm('장바구니를 비우시겠습니까?');
+        const allTableItem = document.getElementById('tableBody');
+        const emptyCartDiv = document.getElementById('emptyCartMessage');
+        const memberId = document.getElementById('memberId').innerText.trim();
+        console.log(memberId);
+        confirm("장바구니를 비우시겠습니까?");
+
+       fetch(`/order/deleteAll/${memberId}`,{
+           method:'DELETE'
+       }).then(response=>{
+           if(!response.ok){
+               throw new Error("삭제 실패");
+           }
+           return response.json();
+       });
+       allTableItem.remove();
+       emptyCartDiv.hidden = false;
     });
 </script>
 

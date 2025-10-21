@@ -12,4 +12,5 @@ public interface CartMapper {
     public CartVO select(Long memberId,Long productId);
     public List<CartListDTO> selectAll(Long memberId);
     public void delete(Long cartId);
+    public void deleteAll(Long memberId);
 }

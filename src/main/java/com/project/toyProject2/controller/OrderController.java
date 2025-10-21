@@ -35,6 +35,7 @@ public class OrderController {
         if (session.getAttribute("SPRING_SECURITY_CONTEXT")!=null){
             SecurityContext context = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
             Optional<MemberVO> loginMember = memberService.findMember(context.getAuthentication().getName());
+            model.addAttribute("loginMember", loginMember);
             model.addAttribute("cartList",cartService.findAllCartByMemberId(loginMember.get().getMemberId()));
         }
         return "order/cart";
@@ -53,8 +54,13 @@ public class OrderController {
     }
     @DeleteMapping("/delete/{cartId}")
     public ResponseEntity<?>deleteCartItem(@PathVariable Long cartId){
-        log.info(cartId.toString());
         cartService.deleteCartItem(cartId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @DeleteMapping("/deleteAll/{memberId}")
+    public ResponseEntity<?>deleteAllCartItem(@PathVariable Long memberId){
+        log.info(memberId.toString());
+        cartService.deleteAllCartItemByMemberId(memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

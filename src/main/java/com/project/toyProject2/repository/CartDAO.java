@@ -25,4 +25,7 @@ public class CartDAO {
     public void delete(Long cartId) {
         cartMapper.delete(cartId);
     }
+    public void deleteAll(Long memberId){
+        cartMapper.deleteAll(memberId);
+    }
 }

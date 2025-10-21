@@ -11,4 +11,5 @@ public interface CartService {
     public CartVO findCartItem(Long memberId,Long productID);
     public List<CartListDTO> findAllCartByMemberId(Long memberId);
     public void deleteCartItem(Long cartId);
+    public void deleteAllCartItemByMemberId(Long memberId);
 }

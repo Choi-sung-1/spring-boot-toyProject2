@@ -38,4 +38,9 @@ public class CartServiceImpl implements CartService {
     public void deleteCartItem(Long cartId) {
         cartDAO.delete(cartId);
     }
+
+    @Override
+    public void deleteAllCartItemByMemberId(Long memberId) {
+        cartDAO.deleteAll(memberId);
+    }
 }
