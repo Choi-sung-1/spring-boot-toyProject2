@@ -102,7 +102,7 @@
 
         function handleDeleteItem(row) {
             if (!confirm("해당 제품을 비우시겠습니까?")) return;
-
+            console.log(row);
             const cartId = row.querySelector("td:nth-child(7) span").innerText.trim();
 
             fetch(`/order/delete/${cartId}`, { method: "DELETE" })
