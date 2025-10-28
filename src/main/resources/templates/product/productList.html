@@ -9,7 +9,7 @@
 <div th:if="${loginMember}!=null">
     <h4 th:text="|로그인 사용자: ${loginMember.get().memberName}|">사용자</h4>
     <h4 th:text="|권한 : ${loginMember.get().memberRole}|"></h4>
-    <a th:href="@{/order/cart}">장바구니</a>
+    <a th:href="@{/cart/list}">장바구니</a>
 
 </div>
 <div th:if="${loginMember}==null">

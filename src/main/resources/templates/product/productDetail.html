@@ -15,7 +15,7 @@
 
     <!-- 로그인 상태 -->
     <div th:if="${loginMember != null}">
-        <a th:href="@{/order/cart}">장바구니</a>
+        <a th:href="@{/cart/list}">장바구니</a>
         <h3 th:text="|권한 : ${loginMember.get().memberRole}|"></h3>
         <h3 id="memberLoginId" th:text="|사용자 : ${loginMember.get().memberName}|"></h3>
         <p hidden id="memberId" th:text="${loginMember.get().memberId}"></p>
@@ -60,7 +60,7 @@
 </section>
 
 <!-- ===== 구매 메뉴 (토글 영역) ===== -->
-<form action="/order/cart" method="post" id="productMenu" hidden>
+<form method="post" id="productMenu" hidden>
     <input type="hidden" name="productId" th:value="*{productId}">
 
     <label for="quantity">수량 선택:</label>
@@ -121,7 +121,7 @@
 
         if (!confirm(`'${productName}' 상품을 ${quantity}개 장바구니에 추가하시겠습니까?`)) return;
 
-        fetch("/order/cart", {
+        fetch("/cart/add", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ productId, memberId, quantity })

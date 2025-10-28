@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>결제하기</title>
+</head>
+<body>
+
+<h1>💳 결제 페이지</h1>
+<a href="/cart/list">← 장바구니로 돌아가기</a>
+<hr>
+
+<!-- 로그인 회원 표시 -->
+<p>주문자: <strong>홍길동</strong></p>
+<p>이메일: <strong>hong@test.com</strong></p>
+
+<hr>
+
+<!-- 주문 상품 목록 -->
+<h2>🛍 주문 상품</h2>
+<table border="1" width="100%" cellspacing="0" cellpadding="8">
+    <thead>
+    <tr>
+        <th>상품명</th>
+        <th>수량</th>
+        <th>가격</th>
+        <th>합계</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>무선 이어폰 V1</td>
+        <td>2</td>
+        <td>₩79,000</td>
+        <td>₩158,000</td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<!-- 결제 요약 -->
+<h2>💵 결제 요약</h2>
+<table border="1" width="50%" cellpadding="8">
+    <tr>
+        <th>상품 총액</th>
+        <td>₩158,000</td>
+    </tr>
+    <tr>
+        <th>배송비</th>
+        <td>₩3,000</td>
+    </tr>
+    <tr>
+        <th>총 결제 금액</th>
+        <td><strong>₩161,000</strong></td>
+    </tr>
+</table>
+
+<hr>
+
+<!-- 배송 정보 입력 -->
+<h2>📦 배송 정보</h2>
+<form action="/payment/complete" method="post">
+    <table cellpadding="8">
+        <tr>
+            <th>받는 사람</th>
+            <td><input type="text" placeholder="이름" required></td>
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td><input type="text" placeholder="010-1234-5678" required></td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td><input type="text" placeholder="주소 입력" required></td>
+        </tr>
+        <tr>
+            <th>요청사항</th>
+            <td><textarea rows="3" cols="40" placeholder="배송 시 요청사항"></textarea></td>
+        </tr>
+    </table>
+
+    <br>
+    <button type="submit">✅ 결제 완료하기</button>
+    <button type="button" onclick="history.back()">취소</button>
+</form>
+
+</body>
+</html>

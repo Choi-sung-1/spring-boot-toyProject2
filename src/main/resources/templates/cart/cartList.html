@@ -62,8 +62,6 @@
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-
-        //  기능별 함수로 분리하기 -->실무 필요
         const rows = document.querySelectorAll("tbody tr");
 
         rows.forEach(row => {
@@ -90,7 +88,7 @@
                 const cartId = row.querySelector("td:nth-child(7)").innerText.trim();
                 const emptyCartDiv = document.getElementById('emptyCartMessage');
 
-                fetch(`/order/delete/${cartId}`, {
+                fetch(`/cart/delete/${cartId}`, {
                     method: 'DELETE'
                 }).then(response=>{
                     if (!response.ok){
@@ -130,13 +128,13 @@
     });
     // 장바구니 비우기
     document.getElementById('rmvCartBtn').addEventListener("click",()=>{
-        const allTableItem = document.getElementById('tableBody');
+        const allTableItem = document.getElementById('cartListTable');
         const emptyCartDiv = document.getElementById('emptyCartMessage');
         const memberId = document.getElementById('memberId').innerText.trim();
         console.log(memberId);
         confirm("장바구니를 비우시겠습니까?");
 
-       fetch(`/order/deleteAll/${memberId}`,{
+       fetch(`/cart/deleteAll/${memberId}`,{
            method:'DELETE'
        }).then(response=>{
            if(!response.ok){
