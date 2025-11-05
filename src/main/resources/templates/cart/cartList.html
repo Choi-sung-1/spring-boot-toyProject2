@@ -135,7 +135,7 @@
                 const value = parseInt(totalCell.textContent.replace(/[^0-9]/g, "")) || 0;
                 sum += value;
             });
-
+            //  배송비
             const delivery = 3000;
 
             document.getElementById("allProductPrice").textContent = `상품 합계: ₩${sum.toLocaleString()}원`;
