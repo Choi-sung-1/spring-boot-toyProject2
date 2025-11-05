@@ -1,11 +1,13 @@
 package com.project.toyProject2.domain.dto;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
 @Data
+@Slf4j
 public class CartListDTO {
     private Long cartId;
     private String imageOriginalName;
@@ -16,7 +18,7 @@ public class CartListDTO {
     private Integer totalPrice=0;
 
     public Integer getTotalPrice() {
-        totalPrice+=productPrice*cartQuantity;
+        totalPrice=productPrice*cartQuantity;
         return totalPrice;
     }
 

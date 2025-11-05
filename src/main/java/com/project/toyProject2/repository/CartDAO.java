@@ -22,6 +22,7 @@ public class CartDAO {
     public List<CartListDTO> selectAll(Long memberId) {
         return cartMapper.selectAll(memberId);
     }
+    public void updateCartQuantity(Long cartId,Long cartQuantity){cartMapper.update(cartId,cartQuantity);}
     public void delete(Long cartId) {
         cartMapper.delete(cartId);
     }

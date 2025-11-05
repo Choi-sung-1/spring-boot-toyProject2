@@ -38,9 +38,9 @@
             </figure>
         </td>
         <td id="productName" th:text="${item.productName}">무선 이어폰 V1</td>
-        <td id="productPrice" th:text="${item.formatProductPrice()}">₩79,000</td>
+        <td id="productPrice" th:text="|${item.formatProductPrice()}원|">₩79,000</td>
         <td><input id="productSelect" type="number" th:value="${item.cartQuantity}" min="1" th:max="${item.productStock}"></td>
-        <td id="productTotalPrice" th:text="${item.formatTotalPrice()}"></td>
+        <td id="productTotalPrice" th:text="|${item.formatTotalPrice()}원|"></td>
         <td><button id="productDelBtn" type="button">삭제</button></td>
         <td hidden="hidden"><input id="cartId" name="cartId" th:text="*{item.cartId}"/></td>
     </tr>
@@ -55,7 +55,7 @@
     <p id="allProductPrice">상품 합계: ₩149,000</p>
     <p>배송비: ₩3,000</p>
     <p><strong id="amount">총 결제 금액: ₩152,000</strong></p>
-    <button id="paymentBtn" type="button">결제하기</button>
+    <a th:href="@{/order/orderPayment}" id="paymentBtn" type="button" onclick="confirmPaymentRedirect(event)">결제하기</a>
     <button id="rmvCartBtn" type="button">장바구니 비우기</button>
 </section>
 
@@ -72,12 +72,31 @@
 
             const price = parseInt(productPrice.textContent.replace(/[^0-9]/g, ""));
 
-            // 수량 변경될 때마다 합계 계산
-            productNumber.addEventListener("input", () => {
+            // 수량 변경될 때마다 합계 계산 서버에 보내야함 변경될때마다
+            productNumber.addEventListener("change", () => {
                 const qty = parseInt(productNumber.value);
                 const total = price * qty;
                 totalPrice.textContent = `₩${total.toLocaleString()}`;
                 updateSummary(); // 총합도 다시 계산
+
+                const cartId = row.querySelector("td:nth-child(7)").innerText.trim();
+
+                fetch(`/cart/updateQuantity/${cartId}`, {
+                    method:'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify({cartQuantity:qty})
+                }).then(response=>{
+                    if (!response.ok){
+                        throw new Error('수량 변경 실패');
+                    }
+                    return response.json();
+                }).then(data=>{
+                    console.log('수량 변경 성공',data);
+                }).catch(error=>{
+                    console.log('에러발생',error);
+                })
             });
 
             // 제품 한개 삭제
@@ -119,9 +138,9 @@
 
             const delivery = 3000;
 
-            document.getElementById("allProductPrice").textContent = `상품 합계: ₩${sum.toLocaleString()}`;
-            document.querySelector("section p:nth-of-type(2)").textContent = `배송비: ₩${delivery.toLocaleString()}`;
-            document.getElementById("amount").textContent = `총 결제 금액: ₩${(sum + delivery).toLocaleString()}`;
+            document.getElementById("allProductPrice").textContent = `상품 합계: ₩${sum.toLocaleString()}원`;
+            document.querySelector("section p:nth-of-type(2)").textContent = `배송비: ₩${delivery.toLocaleString()}원`;
+            document.getElementById("amount").textContent = `총 결제 금액: ₩${(sum + delivery).toLocaleString()}원`;
         }
         updateSummary(); // 초기 로드 시 한 번 계산
 
@@ -132,7 +151,9 @@
         const emptyCartDiv = document.getElementById('emptyCartMessage');
         const memberId = document.getElementById('memberId').innerText.trim();
         console.log(memberId);
-        confirm("장바구니를 비우시겠습니까?");
+        if(!confirm("장바구니를 비우시겠습니까?")){
+            return;
+        }
 
        fetch(`/cart/deleteAll/${memberId}`,{
            method:'DELETE'
@@ -145,6 +166,18 @@
        allTableItem.remove();
        emptyCartDiv.hidden = false;
     });
+
+    function confirmPaymentRedirect(event) {
+        // 기본 이동 막기
+        event.preventDefault();
+
+        if (confirm("결제 페이지로 이동하시겠습니까?")) {
+            window.location.href = "/order/orderPayment";
+        } else {
+
+        }
+    }
+
 </script>
 
 

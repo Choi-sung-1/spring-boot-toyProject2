@@ -16,6 +16,11 @@
                  INNER JOIN TBL_IMAGES TI on TP.PRODUCT_ID = TI.PRODUCT_ID
         WHERE TC.MEMBER_ID =#{memberId}
     </select>
+    <update id="update">
+        UPDATE TBL_CART
+        SET CART_QUANTITY = #{cartQuantity}
+        WHERE CART_ID = #{cartId}
+    </update>
     <delete id="delete">
         DELETE FROM TBL_CART
         WHERE CART_ID = #{cartId}

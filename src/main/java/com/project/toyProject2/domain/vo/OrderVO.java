@@ -13,5 +13,6 @@ public class OrderVO {
     private Integer orderTotalPrice;
     private String orderPaymentMethod;
     private String orderAddress;
+    private String orderDetailAddress;
     private String orderMemo;
 }

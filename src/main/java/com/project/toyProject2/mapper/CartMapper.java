@@ -10,6 +10,7 @@ import java.util.List;
 public interface CartMapper {
     public void insert(CartVO cartVO);
     public CartVO select(Long memberId,Long productId);
+    public void update(Long cartId,Long cartQuantity);
     public List<CartListDTO> selectAll(Long memberId);
     public void delete(Long cartId);
     public void deleteAll(Long memberId);

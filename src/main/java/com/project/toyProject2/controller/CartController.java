@@ -7,6 +7,7 @@ import com.project.toyProject2.service.CartService;
 import com.project.toyProject2.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/cart/*")
 @RequiredArgsConstructor
@@ -57,4 +59,11 @@ public class CartController {
         cartService.deleteAllCartItemByMemberId(memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @PostMapping("/updateQuantity/{cartId}")
+    @ResponseBody
+    public ResponseEntity<String> updateQuantity(@PathVariable Long cartId, @RequestBody CartVO cartVO) {
+        cartService.updateCartItemQuantity(cartId, cartVO.getCartQuantity());
+        return ResponseEntity.ok("success");
+    }
+
 }

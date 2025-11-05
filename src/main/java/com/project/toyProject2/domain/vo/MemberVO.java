@@ -10,6 +10,7 @@ public class MemberVO {
     private String memberLoginId;
     private String memberPassword;
     private String memberName;
+    private String memberPhone;
     private String memberRole;
     private LocalDateTime memberRegisterDate;
     private LocalDateTime memberUpdateDate;

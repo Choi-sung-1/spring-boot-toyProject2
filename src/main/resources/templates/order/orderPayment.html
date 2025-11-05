@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>결제하기</title>
 </head>
 <body>
-
 <h1>💳 결제 페이지</h1>
 <a href="/cart/list">← 장바구니로 돌아가기</a>
 <hr>
 
 <!-- 로그인 회원 표시 -->
-<p>주문자: <strong>홍길동</strong></p>
-<p>이메일: <strong>hong@test.com</strong></p>
+<p>주문자: <strong th:text="${orderPaymentDTO.memberName}">홍길동</strong></p>
+<p>이메일: <strong th:text="${orderPaymentDTO.memberLoginId}">hong@test.com</strong></p>
 
 <hr>
 
@@ -28,12 +27,12 @@
         <th>합계</th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-        <td>무선 이어폰 V1</td>
-        <td>2</td>
-        <td>₩79,000</td>
-        <td>₩158,000</td>
+    <tbody id="cart-body">
+    <tr th:each="product : ${orderPaymentDTO.cartList}">
+        <td th:text="${product.productName}">무선 이어폰 V1</td>
+        <td th:text="|${product.cartQuantity}개|">2</td>
+        <td th:text="|${product.formatProductPrice}원|">₩79,000</td>
+        <td th:text="|${product.formatTotalPrice()}원|">₩158,000</td>
     </tr>
     </tbody>
 </table>
@@ -45,46 +44,80 @@
 <table border="1" width="50%" cellpadding="8">
     <tr>
         <th>상품 총액</th>
-        <td>₩158,000</td>
+        <td id="totalProductPrice" th:text="${orderPaymentDTO.totalPrice}">₩158,000</td>
     </tr>
     <tr>
         <th>배송비</th>
-        <td>₩3,000</td>
+        <td th:text="|${orderPaymentDTO.formatDeliveryPrice()}원|">₩3,000</td>
     </tr>
     <tr>
         <th>총 결제 금액</th>
-        <td><strong>₩161,000</strong></td>
+        <td><strong id="totalPayment" th:text="${orderPaymentDTO.totalPaymentPrice}">₩161,000</strong></td>
     </tr>
 </table>
-
 <hr>
 
 <!-- 배송 정보 입력 -->
 <h2>📦 배송 정보</h2>
-<form action="/payment/complete" method="post">
+<form id="deliverForm" method="post">
     <table cellpadding="8">
         <tr>
             <th>받는 사람</th>
-            <td><input type="text" placeholder="이름" required></td>
+            <td><input type="text" placeholder="이름" readonly th:value="${orderPaymentDTO.memberName}" required></td>
         </tr>
         <tr>
             <th>연락처</th>
-            <td><input type="text" placeholder="010-1234-5678" required></td>
+            <td><input type="text" th:value="${orderPaymentDTO.memberPhone}" readonly required></td>
         </tr>
         <tr>
             <th>주소</th>
-            <td><input type="text" placeholder="주소 입력" required></td>
+            <td>
+                <input type="text" id="postcode" placeholder="우편번호" readonly style="width:100px;">
+                <button type="button" id="searchAddressBtn">주소 검색</button><br>
+                <input type="text" id="orderAddress" placeholder="기본 주소" readonly style="width:300px;">
+            </td>
+        </tr>
+        <tr>
+            <th>상세 주소</th>
+            <td><input type="text" id="orderDetailAddress" placeholder="상세 주소 입력" required style="width:300px;"></td>
         </tr>
         <tr>
             <th>요청사항</th>
-            <td><textarea rows="3" cols="40" placeholder="배송 시 요청사항"></textarea></td>
+            <td><textarea type="text" id="orderMemo" placeholder="요청 사항 입력" required style="width:300px;"></textarea></td>
         </tr>
     </table>
-
-    <br>
-    <button type="submit">✅ 결제 완료하기</button>
-    <button type="button" onclick="history.back()">취소</button>
+    <button type="submit">결제하기</button>
 </form>
 
+<!-- 🔹 카카오 우편번호 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded",()=>{
+    const rows = document.querySelectorAll("#cart-body> tr");
+    const deliver = 3000;
+    let totalPrice = 0;
+
+    rows.forEach(row=>{
+        const productPrice = row.querySelector("td:nth-child(4)");
+        const price = parseInt(productPrice.textContent.replace(/[^0-9]/g, ""));
+        totalPrice += price;
+    }) ;
+    document.getElementById("totalProductPrice").textContent = `₩${totalPrice.toLocaleString()}원`;
+    document.getElementById("totalPayment").textContent = `₩${(totalPrice + deliver).toLocaleString()}원`;
+});
+    const postcodeInput = document.getElementById("postcode");
+    const addressInput = document.getElementById("orderAddress");
+
+    // 🔹 "주소 검색" 버튼 클릭 시
+    searchAddressBtn.addEventListener("click", () => {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                postcodeInput.value = data.zonecode;   // 우편번호
+                addressInput.value = data.address;     // 기본 주소
+            }
+        }).open();
+    });
+</script>
 </body>
 </html>

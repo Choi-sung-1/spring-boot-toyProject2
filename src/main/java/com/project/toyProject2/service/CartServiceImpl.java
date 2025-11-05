@@ -30,6 +30,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void updateCartItemQuantity(Long cartId, Long cartQuantity) {
+        cartDAO.updateCartQuantity(cartId, cartQuantity);
+    }
+
+    @Override
     public List<CartListDTO> findAllCartByMemberId(Long memberId) {
         return cartDAO.selectAll(memberId);
     }
