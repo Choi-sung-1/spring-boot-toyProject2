@@ -8,5 +8,4 @@ public class OrderItemVO {
     private Long orderId;
     private Long orderProductId;
     private Integer orderItemQuantity;
-    private Integer orderItemPrice;
 }

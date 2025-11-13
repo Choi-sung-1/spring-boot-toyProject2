@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.toyProject2.mapper.OrderMapper">
+    <insert id="insert" keyProperty="orderId" useGeneratedKeys="true">
+        INSERT INTO TBL_ORDER(MEMBER_ID, ORDER_SUMMARY, ORDER_DATE, ORDER_STATUS, ORDER_TOTAL_PRODUCT_PRICE, ORDER_DELIVERY_PRICE, ORDER_TOTAL_PAYMENT, ORDER_PAYMENT_METHOD, ORDER_ADDRESS, ORDER_DETAIL_ADDRESS, ORDER_MEMO)
+        VALUES (#{memberId},#{orderSummary},#{orderDate},#{orderStatus},#{orderTotalProductPrice},#{orderDeliveryPrice},#{orderTotalPayment},#{orderPaymentMethod},#{orderAddress},#{orderDetailAddress},#{orderMemo})
+    </insert>
+</mapper>

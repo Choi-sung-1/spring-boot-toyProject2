@@ -10,10 +10,13 @@ import java.util.Locale;
 @Slf4j
 public class CartListDTO {
     private Long cartId;
+
     private String imageOriginalName;
     private String productName;
     private Integer productPrice;
+//    제품 수량
     private Integer productStock;
+//    장바구니 수량
     private Integer cartQuantity;
     private Integer totalPrice=0;
 
