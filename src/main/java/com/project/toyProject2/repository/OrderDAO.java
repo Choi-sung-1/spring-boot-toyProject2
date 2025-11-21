@@ -15,8 +15,8 @@ public class OrderDAO {
     public void insertOrder(OrderVO orderVO) {
         orderMapper.insert(orderVO);
     }
-    public List<OrderVO> selectOrderList(){
-        return orderMapper.selectAll();
+    public List<OrderVO> selectOrderList(Long memberId){
+        return orderMapper.selectAll(memberId);
     }
     public OrderVO selectOrderById(Long orderId) {
         return orderMapper.selectById(orderId);

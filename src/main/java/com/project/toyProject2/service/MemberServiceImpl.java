@@ -30,4 +30,9 @@ public class MemberServiceImpl implements MemberService {
     public Optional<MemberVO> findMember(String memberLoginId) {
         return memberDAO.selectMemberById(memberLoginId);
     }
+
+    @Override
+    public MemberVO findMemberByPk(Long memberId) {
+        return memberDAO.selectMemberByPk(memberId);
+    }
 }

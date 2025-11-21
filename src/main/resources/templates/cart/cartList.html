@@ -33,8 +33,9 @@
     <tr th:each="item:${cartList}" id="tableRow">
         <td>
             <figure>
+                <a th:href="@{/product/detail/{productId}(productId=${item.productId})}">
                 <img th:src="@{|/productImages/${item.imageOriginalName}|}" alt="무선 이어폰 V1" width="100">
-                <figcaption th:text="${item.productName}">V1 이어폰</figcaption>
+                </a>
             </figure>
         </td>
         <td id="productName" th:text="${item.productName}">무선 이어폰 V1</td>
@@ -53,8 +54,6 @@
 <section>
     <h3>결제 정보</h3>
     <p id="allProductPrice">상품 합계: ₩149,000</p>
-    <p>배송비: ₩3,000</p>
-    <p><strong id="amount">총 결제 금액: ₩152,000</strong></p>
     <a th:href="@{/order/orderPayment}" id="paymentBtn" type="button" onclick="confirmPaymentRedirect(event)">결제하기</a>
     <button id="rmvCartBtn" type="button">장바구니 비우기</button>
 </section>
@@ -135,12 +134,7 @@
                 const value = parseInt(totalCell.textContent.replace(/[^0-9]/g, "")) || 0;
                 sum += value;
             });
-            //  배송비
-            const delivery = 3000;
-
             document.getElementById("allProductPrice").textContent = `상품 합계: ₩${sum.toLocaleString()}원`;
-            document.querySelector("section p:nth-of-type(2)").textContent = `배송비: ₩${delivery.toLocaleString()}원`;
-            document.getElementById("amount").textContent = `총 결제 금액: ₩${(sum + delivery).toLocaleString()}원`;
         }
         updateSummary(); // 초기 로드 시 한 번 계산
 
@@ -150,6 +144,7 @@
         const allTableItem = document.getElementById('cartListTable');
         const emptyCartDiv = document.getElementById('emptyCartMessage');
         const memberId = document.getElementById('memberId').innerText.trim();
+        const allProductPrice = document.getElementById('allProductPrice');
         console.log(memberId);
         if(!confirm("장바구니를 비우시겠습니까?")){
             return;
@@ -164,17 +159,15 @@
            return response.json();
        });
        allTableItem.remove();
+       allProductPrice.textContent='상품 합계: ₩0원';
        emptyCartDiv.hidden = false;
     });
 
     function confirmPaymentRedirect(event) {
         // 기본 이동 막기
         event.preventDefault();
-
         if (confirm("결제 페이지로 이동하시겠습니까?")) {
             window.location.href = "/order/orderPayment";
-        } else {
-
         }
     }
 

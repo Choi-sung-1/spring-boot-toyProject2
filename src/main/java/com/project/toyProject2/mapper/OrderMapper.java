@@ -7,7 +7,7 @@ import java.util.List;
 @Mapper
 public interface OrderMapper {
     public void insert(OrderVO orderVO);
-    public List<OrderVO> selectAll();
+    public List<OrderVO> selectAll(Long memberId);
     public OrderVO selectById(Long orderId);
 
 }

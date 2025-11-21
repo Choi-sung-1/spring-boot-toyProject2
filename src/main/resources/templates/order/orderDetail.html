@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 상세 내역</title>
+</head>
+<body>
+
+<h1>🧾 주문 상세 내역</h1>
+<a href="/order/orderList">← 주문 목록으로</a>
+<hr>
+
+<!-- 주문 기본 정보 -->
+<section>
+    <h2>주문 정보</h2>
+    <table border="1" cellpadding="8" width="60%">
+        <tr>
+            <th>주문 번호</th>
+            <td th:text="${order.orderId}"></td>
+        </tr>
+        <tr>
+            <th>주문 일시</th>
+            <td th:text="${order.formatOrderDate()}"></td>
+        </tr>
+        <tr>
+            <th>결제 방법</th>
+            <td th:text="${order.orderPaymentMethod}"></td>
+        </tr>
+        <tr>
+            <th>주문 상태</th>
+            <td th:text="${order.orderStatus}"></td>
+        </tr>
+    </table>
+</section>
+
+<hr>
+
+<!-- 배송 정보 -->
+<section>
+    <h2>📦 배송 정보</h2>
+    <table border="1" cellpadding="8" width="60%">
+        <tr>
+            <th>받는 사람</th>
+            <td th:text="${member.memberName}"></td>
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td th:text="${member.memberPhone}"></td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td th:text="${order.orderAddress}"></td>
+        </tr>
+        <tr>
+            <th>상세 주소</th>
+            <td th:text="${order.orderDetailAddress}"></td>
+        </tr>
+        <tr>
+            <th>요청사항</th>
+            <td th:text="${order.orderMemo}"></td>
+        </tr>
+    </table>
+</section>
+
+<hr>
+
+<!-- 상품 목록 -->
+<section>
+    <h2>🛍 주문 상품</h2>
+    <table border="1" cellpadding="8" width="100%">
+        <thead>
+        <tr>
+            <th>상품명</th>
+            <th>수량</th>
+            <th>가격</th>
+            <th>합계</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product:${orderItems}">
+            <td>
+                <a th:href="@{/product/detail/{productId}(productId=${product.productId})}" th:text="${product.productName}"></a>
+            </td>
+            <td th:text="|${product.orderItemQuantity}개|"></td>
+            <td th:text="|${product.formatProductPrice()}원|"></td>
+            <td th:text="|${product.calProductTotalPrice()}원|"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<hr>
+
+<!-- 결제 요약 -->
+<section>
+    <h2>💵 결제 금액</h2>
+    <table border="1" cellpadding="8" width="50%">
+        <tr>
+            <th>상품 총액</th>
+            <td th:text="|${order.formatOrderTotalProductPrice()}원|"></td>
+        </tr>
+        <tr>
+            <th>배송비</th>
+            <td th:text="|${order.formatDeliveryPrice()}원|"></td>
+        </tr>
+        <tr>
+            <th><strong>총 결제 금액</strong></th>
+            <td><strong th:text="|${order.formatOrderTotalPayment()}원|"></strong></td>
+        </tr>
+    </table>
+</section>
+
+</body>
+</html>

@@ -9,4 +9,5 @@ public interface MemberService {
     public void join(MemberVO memberVO);
 //    회원 조회
     public Optional<MemberVO> findMember(String memberLoginId);
+    public MemberVO findMemberByPk(Long memberId);
 }

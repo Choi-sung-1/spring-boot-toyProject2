@@ -19,4 +19,7 @@ public class MemberDAO {
     public Optional<MemberVO> selectMemberById(String memberLoginId) {
         return memberMapper.selectMemberById(memberLoginId);
     }
+    public MemberVO selectMemberByPk(Long memberId){
+        return memberMapper.selectMemberByPk(memberId);
+    }
 }

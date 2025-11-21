@@ -25,8 +25,8 @@ public class ProductDAO {
         return productMapper.selectAll();
     }
 //    상품 업데이트
-    public void updateProduct(ProductVO productVO) {
-        productMapper.update(productVO);
+    public void updateProduct(Long productId,Integer productStock) {
+        productMapper.update(productId,productStock);
     }
 //    상품 제거
     public void deleteProductById(Long id) {

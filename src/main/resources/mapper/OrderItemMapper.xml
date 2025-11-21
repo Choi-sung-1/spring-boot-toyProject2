@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.toyProject2.mapper.OrderItemMapper">
+    <insert id="insert" keyProperty="orderItemId" useGeneratedKeys="true">
+        INSERT INTO TBL_ORDER_ITEM(ORDER_ID, ORDER_PRODUCT_ID, ORDER_ITEM_QUANTITY)
+        VALUES (#{orderId},#{orderProductId},#{orderItemQuantity})
+    </insert>
+    <select id="select">
+        SELECT TOI.ORDER_ITEM_ID,ORDER_ID,TOI.ORDER_PRODUCT_ID AS productId,TOI.ORDER_ITEM_QUANTITY ,TP.PRODUCT_NAME ,TP.PRODUCT_PRICE FROM TBL_ORDER_ITEM TOI
+               INNER JOIN TBL_PRODUCT TP ON TOI.ORDER_PRODUCT_ID = TP.PRODUCT_ID
+        WHERE ORDER_ID = #{orderId}
+    </select>
+</mapper>

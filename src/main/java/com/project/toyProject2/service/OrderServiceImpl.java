@@ -6,9 +6,8 @@ import com.project.toyProject2.domain.dto.OrderRequestDTO;
 import com.project.toyProject2.domain.vo.MemberVO;
 import com.project.toyProject2.domain.vo.OrderItemVO;
 import com.project.toyProject2.domain.vo.OrderVO;
-import com.project.toyProject2.repository.CartDAO;
-import com.project.toyProject2.repository.MemberDAO;
-import com.project.toyProject2.repository.OrderDAO;
+import com.project.toyProject2.domain.vo.ProductVO;
+import com.project.toyProject2.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,8 @@ public class OrderServiceImpl implements OrderService {
     private final CartDAO cartDAO;
     private final MemberDAO memberDAO;
     private final OrderDAO orderDAO;
+    private final OrderItemDAO orderItemDAO;
+    private final ProductDAO productDAO;
     @Override
     public OrderPaymentDTO orderPaymentPage(MemberVO member) {
         OrderPaymentDTO orderPaymentDTO = new OrderPaymentDTO();
@@ -42,8 +43,12 @@ public class OrderServiceImpl implements OrderService {
         OrderVO orderVO = new OrderVO();
 
         if (!cartList.isEmpty()) {
-            int cartSize = cartList.size()-1;
-            orderVO.setOrderSummary(cartList.get(0).getProductName() + "외 " + cartSize + "건");
+            if (cartList.size() != 1) {
+                int cartSize = cartList.size() - 1;
+                orderVO.setOrderSummary(cartList.get(0).getProductName() + " 외 " + cartSize + "건");
+            }else{
+                orderVO.setOrderSummary(cartList.get(0).getProductName());
+            }
         }
         orderVO.setMemberId(member.getMemberId());
         orderVO.setOrderDate(LocalDateTime.now());
@@ -60,18 +65,22 @@ public class OrderServiceImpl implements OrderService {
 
         orderDAO.insertOrder(orderVO);
 
-        OrderItemVO orderItemVO = new OrderItemVO();
-        orderItemVO.setOrderId(orderVO.getOrderId());
-//        orderItem테이블 추가
         for (CartListDTO cartListDTO : cartList) {
-
+            OrderItemVO orderItemVO = new OrderItemVO();
+            orderItemVO.setOrderId(orderVO.getOrderId());
+            orderItemVO.setOrderProductId(cartListDTO.getProductId());
+            orderItemVO.setOrderItemQuantity(cartListDTO.getCartQuantity());
+            orderItemDAO.insertOrderItem(orderItemVO);
+            ProductVO product = productDAO.selectProductById(cartListDTO.getProductId());
+//            제품 재고 업데이트
+            productDAO.updateProduct(product.getProductId(), product.getProductStock()-cartListDTO.getCartQuantity());
         }
-
+        cartDAO.deleteAll(member.getMemberId());
     }
 
     @Override
-    public List<OrderVO> orderList() {
-        return orderDAO.selectOrderList();
+    public List<OrderVO> orderList(Long memberId) {
+        return orderDAO.selectOrderList(memberId);
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface ProductMapper {
 //    전체 상품 조회
     public List<ProductVO> selectAll();
 //    상춤 업데이트
-    public void update(ProductVO productVO);
+    public void update(Long productId,Integer productStock);
 //    상품 삭제
     public void delete(Long productId);
 }

@@ -54,7 +54,6 @@
     </p>
 
     <div id="buyMenu">
-        <button type="button">⭐️</button>
         <button type="button" id="buyBtn">구매하기</button>
     </div>
 </section>
@@ -71,8 +70,7 @@
     </select>
 
     <br><br>
-
-    <button type="submit">구매하기</button>
+    <button type="button" id="favoriteBtn">찜하기</button>
     <button type="button" id="cartBtn" onclick="onClickCartBtn()">장바구니 담기</button>
 </form>
 
@@ -89,6 +87,7 @@
 <!-- ===== 스크립트 ===== -->
 <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function() {
+        const favoriteBtn = document.getElementById("favoriteBtn");
         const buyBtn = document.getElementById("buyBtn");
         const productMenu = document.getElementById("productMenu");
         const buyMenu = document.getElementById("buyMenu");

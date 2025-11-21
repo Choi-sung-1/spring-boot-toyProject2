@@ -13,6 +13,9 @@
             SELECT * FROM TBL_PRODUCT
         </select>
     <update id="update">
+        UPDATE TBL_PRODUCT
+        SET PRODUCT_STOCK=#{productStock}
+        WHERE PRODUCT_ID =#{productId}
     </update>
     <delete id="delete">
         DELETE FROM TBL_PRODUCT WHERE PRODUCT_ID=#{productID}

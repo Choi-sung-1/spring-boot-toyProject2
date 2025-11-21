@@ -11,4 +11,5 @@ public interface MemberMapper {
     public void insert(MemberVO memberVO);
 //    회원 조회
     public Optional<MemberVO> selectMemberById(String memberLoginId);
+    public MemberVO selectMemberByPk(Long memberId);
 }

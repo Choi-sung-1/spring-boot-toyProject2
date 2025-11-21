@@ -5,10 +5,12 @@ import com.project.toyProject2.domain.dto.CartListDTO;
 import com.project.toyProject2.domain.vo.CartVO;
 import com.project.toyProject2.repository.CartDAO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -36,7 +38,15 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartListDTO> findAllCartByMemberId(Long memberId) {
-        return cartDAO.selectAll(memberId);
+        List<CartListDTO> findCartList = cartDAO.selectAll(memberId);
+        Map<Long, CartListDTO> map = new LinkedHashMap<>();
+
+        for (CartListDTO cartListDTO : findCartList) {
+            if (!map.containsKey(cartListDTO.getProductId())){
+                map.put(cartListDTO.getProductId(), cartListDTO);
+            }
+        }
+        return new ArrayList<>(map.values());
     }
 
     @Override

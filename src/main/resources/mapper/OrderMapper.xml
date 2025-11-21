@@ -5,4 +5,12 @@
         INSERT INTO TBL_ORDER(MEMBER_ID, ORDER_SUMMARY, ORDER_DATE, ORDER_STATUS, ORDER_TOTAL_PRODUCT_PRICE, ORDER_DELIVERY_PRICE, ORDER_TOTAL_PAYMENT, ORDER_PAYMENT_METHOD, ORDER_ADDRESS, ORDER_DETAIL_ADDRESS, ORDER_MEMO)
         VALUES (#{memberId},#{orderSummary},#{orderDate},#{orderStatus},#{orderTotalProductPrice},#{orderDeliveryPrice},#{orderTotalPayment},#{orderPaymentMethod},#{orderAddress},#{orderDetailAddress},#{orderMemo})
     </insert>
+    <select id="selectAll">
+        SELECT * FROM TBL_ORDER
+        WHERE MEMBER_ID=#{memberId}
+    </select>
+    <select id="selectById">
+        SELECT * FROM TBL_ORDER
+        WHERE ORDER_ID=#{orderId}
+    </select>
 </mapper>

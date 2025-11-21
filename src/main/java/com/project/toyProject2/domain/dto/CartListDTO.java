@@ -10,7 +10,7 @@ import java.util.Locale;
 @Slf4j
 public class CartListDTO {
     private Long cartId;
-
+    private Long productId;
     private String imageOriginalName;
     private String productName;
     private Integer productPrice;

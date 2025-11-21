@@ -10,6 +10,6 @@ import java.util.List;
 public interface OrderService {
     public OrderPaymentDTO orderPaymentPage(MemberVO member);
     public void saveOrder(OrderRequestDTO orderRequestDTO);
-    public List<OrderVO> orderList();
+    public List<OrderVO> orderList(Long memberId);
     public OrderVO findOrder(Long orderId);
 }

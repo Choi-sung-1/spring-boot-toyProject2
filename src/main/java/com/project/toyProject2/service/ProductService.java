@@ -12,7 +12,7 @@ public interface ProductService {
 //    상품 전체 조회
     public List<ProductVO> findAllProduct();
 //    상품 업데이트
-    public void updateProduct(ProductVO productVO);
+    public void updateProduct(Long productId,Integer productStock);
 //    상품 제거
     public void deleteProduct(Long id);
 }
