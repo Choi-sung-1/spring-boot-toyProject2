@@ -33,7 +33,7 @@
 <section th:object="${product}">
     <input type="hidden" id="productId" th:value="*{productId}">
     <h2 id="productName" th:text="*{productName}">상품명</h2>
-    <p>가격: <span id="productPrice" th:text="*{productPrice}">0</span>원</p>
+    <p>가격: <span id="productPrice" th:text="*{formatProductPrice()}">0</span>원</p>
     <p>설명: <span th:text="*{productDescription}">상품 설명</span></p>
 
     <!-- 상품 이미지 -->

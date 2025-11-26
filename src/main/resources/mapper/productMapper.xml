@@ -9,13 +9,19 @@
         SELECT * FROM TBL_PRODUCT WHERE PRODUCT_ID=#{productId}
     </select>
 
-        <select id="selectAll" resultType="com.project.toyProject2.domain.vo.ProductVO">
-            SELECT * FROM TBL_PRODUCT
-        </select>
+    <select id="selectAll" resultType="com.project.toyProject2.domain.dto.ProductListDTO">
+        SELECT TP.PRODUCT_ID,TP.PRODUCT_NAME,TP.PRODUCT_PRICE,TP.PRODUCT_READ_COUNT,TI.IMAGE_ORIGINAL_NAME FROM TBL_IMAGES TI
+          INNER JOIN TBL_PRODUCT TP on TP.PRODUCT_ID = TI.PRODUCT_ID;
+    </select>
     <update id="update">
         UPDATE TBL_PRODUCT
         SET PRODUCT_STOCK=#{productStock}
         WHERE PRODUCT_ID =#{productId}
+    </update>
+    <update id="updateReadCount">
+        UPDATE TBL_PRODUCT
+        SET PRODUCT_READ_COUNT = PRODUCT_READ_COUNT+1
+        WHERE PRODUCT_ID = #{productId}
     </update>
     <delete id="delete">
         DELETE FROM TBL_PRODUCT WHERE PRODUCT_ID=#{productID}

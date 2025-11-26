@@ -54,6 +54,7 @@ public class ProductController {
             model.addAttribute("loginMember", loginMember);
         }
         model.addAttribute("imagePaths",imageService.findImagePaths(productId));
+        productService.updateReadCount(productId);
         model.addAttribute("product", productService.findProduct(productId));
         return "product/productDetail";
     }

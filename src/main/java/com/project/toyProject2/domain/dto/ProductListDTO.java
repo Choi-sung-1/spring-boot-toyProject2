@@ -1,24 +1,20 @@
-package com.project.toyProject2.domain.vo;
+package com.project.toyProject2.domain.dto;
 
 import lombok.Data;
 
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
 import java.util.Locale;
 
 @Data
-public class ProductVO {
+public class ProductListDTO {
     private Long productId;
     private String productName;
-    private String productDescription;
     private Integer productPrice;
-    private Integer productStock;
-
     private Integer productReadCount;
-    private LocalDateTime productCreateTime;
-    private LocalDateTime productUpdateTime;
+    private String imageOriginalName;
 
-    public String formatProductPrice(){
+
+    public String formatProductPrice() {
         NumberFormat format = NumberFormat.getCurrencyInstance(Locale.KOREA);
         return format.format(productPrice);
     }

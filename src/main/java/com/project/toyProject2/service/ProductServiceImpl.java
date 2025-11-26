@@ -1,5 +1,6 @@
 package com.project.toyProject2.service;
 
+import com.project.toyProject2.domain.dto.ProductListDTO;
 import com.project.toyProject2.domain.vo.ImageVO;
 import com.project.toyProject2.domain.vo.ProductVO;
 import com.project.toyProject2.repository.ImageDAO;
@@ -10,11 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+
 public class ProductServiceImpl implements ProductService {
     private final ProductDAO productDAO;
     private final ImageDAO imageDAO;
@@ -59,15 +60,29 @@ public class ProductServiceImpl implements ProductService {
     }
 //    전체 상품 조회
     @Override
-    public List<ProductVO> findAllProduct() {
-        return productDAO.selectAllProducts();
+    public List<ProductListDTO> findAllProduct() {
+        List<ProductListDTO> findAll = productDAO.selectAllProducts();
+        Map<Long,ProductListDTO> map = new HashMap<>();
+
+        for(ProductListDTO productListDTO : findAll){
+            if (!map.containsKey(productListDTO.getProductId())) {
+                map.put(productListDTO.getProductId(),productListDTO);
+            }
+        }
+        return new ArrayList<>(map.values());
     }
 //    상품 업데이트
     @Override
     public void updateProduct(Long productId,Integer productStock) {
         productDAO.updateProduct(productId,productStock);
     }
-//    상품 삭제
+
+    @Override
+    public void updateReadCount(Long productId) {
+        productDAO.updateProductReadCount(productId);
+    }
+
+    //    상품 삭제
     @Override
     public void deleteProduct(Long id) {
         imageDAO.delete(id);

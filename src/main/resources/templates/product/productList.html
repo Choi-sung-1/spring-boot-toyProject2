@@ -3,46 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <title>상품 목록</title>
+
+    <style>
+
+        /* 페이지 전체 여백 & 폰트 정리 */
+        body {
+            margin: 0;
+            padding: 0 40px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fafafa;
+        }
+
+        h1 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 26px;
+        }
+
+        /* 🔥 상단 네비게이션 */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .nav-right a {
+            margin-left: 12px;
+            padding: 8px 14px;
+            background: #2d6df6;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-right a:hover {
+            background: #184bd0;
+        }
+
+        /* 로그인 정보 */
+        .member-box {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            line-height: 1.5em;
+        }
+
+        /* 그리드 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        /* 상품 카드 */
+        .product-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            transition: 0.25s ease;
+            background: #ffffff;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        /* 이미지 */
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 상품명 */
+        .product-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 8px;
+            line-height: 1.3em;
+        }
+
+        /* 가격 */
+        .price {
+            color: #444;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        /* 상세 버튼 */
+        a.detail-btn {
+            display: inline-block;
+            padding: 8px 14px;
+            background: #0a74ff;
+            color: #ffffff;
+            border-radius: 6px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        a.detail-btn:hover {
+            background: #0057c2;
+        }
+
+        /* 관리자만 보이는 버튼 */
+        .admin-link {
+            margin-top: 30px;
+            display: inline-block;
+            padding: 8px 14px;
+            background: #444;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .read-count {
+            margin: 4px 0 10px 0;
+            font-size: 13px;
+            color: #777;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+        }
+
+    </style>
 </head>
+
 <body>
-<h1>상품 목록</h1>
-<div th:if="${loginMember}!=null">
-    <h4 th:text="|로그인 사용자: ${loginMember.get().memberName}|">사용자</h4>
-    <h4 th:text="|권한 : ${loginMember.get().memberRole}|"></h4>
-    <a th:href="@{/cart/list}">장바구니</a>
+<!-- 상단 네비 -->
+<div class="top-nav">
 
+    <h1>상품 목록</h1>
+
+    <div class="nav-right">
+        <a th:href="@{/}">홈으로</a>
+        <a th:href="@{/cart/list}">장바구니</a>
+        <a th:href="@{/order/orderList}">주문내역</a>
+    </div>
 </div>
-<div th:if="${loginMember}==null">
-    <h4>
-        <a th:href="@{/member/login}">로그인</a> 후 이용해주세요.
-    </h4>
+
+<!-- 로그인 정보 -->
+<div th:if="${loginMember} != null" class="member-box">
+    <p>환영합니다 <strong th:text="${loginMember.get().memberName}"></strong>님!</p>
+    <p>원하는 상품을 둘러보세요.</p>
+    <p th:text="|권한 : ${loginMember.get().memberRole}|"></p>
 </div>
-<a th:href="@{/}">홈으로</a>
-<table border="1" th:object="${products}">
-    <thead>
-    <tr>
-        <th>상품번호</th>
-        <th>상품명</th>
-        <th>가격</th>
-        <th>상세보기</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- 반복문으로 출력 -->
-    <tr id="productListBox" th:each="product :${products}" th:attr="data-product-id=${product.productId}">
-        <td th:text="${product.productId}">1</td>
-        <td th:text="${product.productName}">청바지</td>
-        <td th:text="${product.formatProductPrice()}">30000원</td>
-        <td><a th:href="@{/product/detail/{productId}(productId=${product.productId})}">보기</a></td>
 
+<div th:if="${loginMember} == null" class="member-box">
+    <h4><a th:href="@{/member/login}">로그인</a> 후 이용해주세요.</h4>
+</div>
 
-    </tr>
-    </tbody>
-</table>
+<!-- 상품 목록 -->
+<div class="product-grid">
+    <div class="product-card" th:each="product : ${products}">
+        <img th:src="@{|/productImages/${product.imageOriginalName}|}" alt="상품 이미지">
+
+        <div class="product-name" th:text="${product.productName}"></div>
+        <div class="read-count">
+            조회수 <span th:text="${product.productReadCount}"></span>
+        </div>
+
+        <div class="price" th:text="${product.formatProductPrice()}"></div>
+
+        <a class="detail-btn"
+           th:href="@{/product/detail/{productId}(productId=${product.productId})}">
+            상세보기
+        </a>
+
+    </div>
+</div>
+
 <div sec:authorize="hasRole('ADMIN')">
-    <a th:href="@{/product/form}">상품 등록 (관리자)</a>
+    <a class="admin-link" th:href="@{/product/form}">상품 등록 (관리자)</a>
 </div>
-
 
 </body>
 </html>
