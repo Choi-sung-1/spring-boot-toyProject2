@@ -1,7 +1,7 @@
 package com.project.toyProject2.service;
 
-import com.project.toyProject2.domain.dto.OrderPaymentDTO;
-import com.project.toyProject2.domain.dto.OrderRequestDTO;
+import com.project.toyProject2.domain.dto.order.OrderPaymentDTO;
+import com.project.toyProject2.domain.dto.order.OrderRequestDTO;
 import com.project.toyProject2.domain.vo.MemberVO;
 import com.project.toyProject2.domain.vo.OrderVO;
 

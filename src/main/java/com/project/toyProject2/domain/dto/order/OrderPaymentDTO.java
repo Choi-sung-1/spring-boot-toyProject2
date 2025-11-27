@@ -1,5 +1,6 @@
-package com.project.toyProject2.domain.dto;
+package com.project.toyProject2.domain.dto.order;
 
+import com.project.toyProject2.domain.dto.cart.CartListDTO;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

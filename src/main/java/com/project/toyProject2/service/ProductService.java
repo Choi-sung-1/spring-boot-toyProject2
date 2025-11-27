@@ -1,5 +1,6 @@
 package com.project.toyProject2.service;
-import com.project.toyProject2.domain.dto.ProductListDTO;
+import com.project.toyProject2.domain.dto.product.ProductListDTO;
+import com.project.toyProject2.domain.dto.product.ProductListRequestDTO;
 import com.project.toyProject2.domain.vo.ProductVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +12,7 @@ public interface ProductService {
 //    상품 조회
     public ProductVO findProduct(Long id);
 //    상품 전체 조회
-    public List<ProductListDTO> findAllProduct();
+    public List<ProductListDTO> findAllProduct(ProductListRequestDTO productListRequestDTO);
 //    상품 업데이트
     public void updateProduct(Long productId,Integer productStock);
 //    상품 조회수 업데이트

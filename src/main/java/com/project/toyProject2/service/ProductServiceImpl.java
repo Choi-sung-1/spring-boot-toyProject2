@@ -1,6 +1,7 @@
 package com.project.toyProject2.service;
 
-import com.project.toyProject2.domain.dto.ProductListDTO;
+import com.project.toyProject2.domain.dto.product.ProductListDTO;
+import com.project.toyProject2.domain.dto.product.ProductListRequestDTO;
 import com.project.toyProject2.domain.vo.ImageVO;
 import com.project.toyProject2.domain.vo.ProductVO;
 import com.project.toyProject2.repository.ImageDAO;
@@ -24,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
     public void saveProduct(ProductVO productVO, MultipartFile[] files) {
         productDAO.insertProduct(productVO);
         if (files != null) {
+            int index=0;
             for (MultipartFile file : files) {
                 if (file.isEmpty()) {
                     continue;
@@ -45,10 +47,12 @@ public class ProductServiceImpl implements ProductService {
                 ImageVO image = new ImageVO();
                 image.setImageOriginalName(fileName);
                 UUID uuid = UUID.randomUUID();
+                image.setMainImage(index == 0 ? "Y":"N");
                 image.setImagePath(uuid+"_"+filePath);
                 image.setImageType("PRODUCT");
                 image.setProductId(productVO.getProductId());
 
+                index++;
                 imageDAO.insert(image);
             }
         }
@@ -60,16 +64,10 @@ public class ProductServiceImpl implements ProductService {
     }
 //    전체 상품 조회
     @Override
-    public List<ProductListDTO> findAllProduct() {
-        List<ProductListDTO> findAll = productDAO.selectAllProducts();
-        Map<Long,ProductListDTO> map = new HashMap<>();
-
-        for(ProductListDTO productListDTO : findAll){
-            if (!map.containsKey(productListDTO.getProductId())) {
-                map.put(productListDTO.getProductId(),productListDTO);
-            }
-        }
-        return new ArrayList<>(map.values());
+    public List<ProductListDTO> findAllProduct(ProductListRequestDTO productListRequestDTO) {
+        List<ProductListDTO> findAll = productDAO.selectAllProducts(productListRequestDTO);
+        //중복 수정필요
+        return findAll;
     }
 //    상품 업데이트
     @Override

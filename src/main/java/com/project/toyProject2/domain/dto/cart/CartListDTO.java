@@ -1,4 +1,4 @@
-package com.project.toyProject2.domain.dto;
+package com.project.toyProject2.domain.dto.cart;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

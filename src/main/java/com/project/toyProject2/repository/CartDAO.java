@@ -1,6 +1,6 @@
 package com.project.toyProject2.repository;
 
-import com.project.toyProject2.domain.dto.CartListDTO;
+import com.project.toyProject2.domain.dto.cart.CartListDTO;
 import com.project.toyProject2.domain.vo.CartVO;
 import com.project.toyProject2.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;

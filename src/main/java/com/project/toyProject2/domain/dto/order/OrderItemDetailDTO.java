@@ -1,4 +1,4 @@
-package com.project.toyProject2.domain.dto;
+package com.project.toyProject2.domain.dto.order;
 
 import lombok.Data;
 

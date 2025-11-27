@@ -1,5 +1,7 @@
 package com.project.toyProject2.controller;
 
+import com.project.toyProject2.domain.dto.product.ProductListDTO;
+import com.project.toyProject2.domain.dto.product.ProductListRequestDTO;
 import com.project.toyProject2.domain.vo.MemberVO;
 import com.project.toyProject2.domain.vo.ProductVO;
 import com.project.toyProject2.service.ImageService;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -27,13 +30,19 @@ public class ProductController {
     private final MemberService memberService;
 
     @GetMapping("/list")
-    public String list(Model model, HttpSession session) {
+    public String list(Model model, HttpSession session,
+                       ProductListRequestDTO productListRequestDTO) {
+
         if (session.getAttribute("SPRING_SECURITY_CONTEXT")!=null){
             SecurityContext context = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
             Optional<MemberVO> loginMember = memberService.findMember(context.getAuthentication().getName());
             model.addAttribute("loginMember", loginMember);
         }
-        model.addAttribute("products", productService.findAllProduct());
+
+        List<ProductListDTO> productList = productService.findAllProduct(productListRequestDTO);
+
+        model.addAttribute("productList", productList);
+        model.addAttribute("productListRequestDTO", productListRequestDTO);
         return "product/productList";
     }
     @GetMapping("/form")

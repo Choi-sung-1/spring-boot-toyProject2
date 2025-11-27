@@ -1,8 +1,8 @@
 package com.project.toyProject2.service;
 
-import com.project.toyProject2.domain.dto.CartListDTO;
-import com.project.toyProject2.domain.dto.OrderPaymentDTO;
-import com.project.toyProject2.domain.dto.OrderRequestDTO;
+import com.project.toyProject2.domain.dto.cart.CartListDTO;
+import com.project.toyProject2.domain.dto.order.OrderPaymentDTO;
+import com.project.toyProject2.domain.dto.order.OrderRequestDTO;
 import com.project.toyProject2.domain.vo.MemberVO;
 import com.project.toyProject2.domain.vo.OrderItemVO;
 import com.project.toyProject2.domain.vo.OrderVO;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service

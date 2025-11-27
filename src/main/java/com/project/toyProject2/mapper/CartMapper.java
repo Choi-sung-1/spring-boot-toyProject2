@@ -1,6 +1,6 @@
 package com.project.toyProject2.mapper;
 
-import com.project.toyProject2.domain.dto.CartListDTO;
+import com.project.toyProject2.domain.dto.cart.CartListDTO;
 import com.project.toyProject2.domain.vo.CartVO;
 import org.apache.ibatis.annotations.Mapper;
 

@@ -1,5 +1,5 @@
 package com.project.toyProject2.mapper;
-import com.project.toyProject2.domain.dto.OrderItemDetailDTO;
+import com.project.toyProject2.domain.dto.order.OrderItemDetailDTO;
 import com.project.toyProject2.domain.vo.OrderItemVO;
 import org.apache.ibatis.annotations.Mapper;
 

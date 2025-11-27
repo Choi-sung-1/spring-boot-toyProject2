@@ -1,6 +1,6 @@
 package com.project.toyProject2.repository;
 
-import com.project.toyProject2.domain.dto.OrderItemDetailDTO;
+import com.project.toyProject2.domain.dto.order.OrderItemDetailDTO;
 import com.project.toyProject2.domain.vo.OrderItemVO;
 import com.project.toyProject2.mapper.OrderItemMapper;
 import lombok.RequiredArgsConstructor;

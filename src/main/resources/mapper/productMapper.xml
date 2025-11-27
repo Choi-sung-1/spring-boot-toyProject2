@@ -9,10 +9,41 @@
         SELECT * FROM TBL_PRODUCT WHERE PRODUCT_ID=#{productId}
     </select>
 
-    <select id="selectAll" resultType="com.project.toyProject2.domain.dto.ProductListDTO">
-        SELECT TP.PRODUCT_ID,TP.PRODUCT_NAME,TP.PRODUCT_PRICE,TP.PRODUCT_READ_COUNT,TI.IMAGE_ORIGINAL_NAME FROM TBL_IMAGES TI
-          INNER JOIN TBL_PRODUCT TP on TP.PRODUCT_ID = TI.PRODUCT_ID;
+    <select id="selectAll" resultType="com.project.toyProject2.domain.dto.product.ProductListDTO">
+        SELECT TP.PRODUCT_ID, TP.PRODUCT_NAME, TP.PRODUCT_PRICE,
+        TP.PRODUCT_READ_COUNT, TP.PRODUCT_CREATE_DATE, TI.IMAGE_ORIGINAL_NAME
+        FROM TBL_IMAGES TI
+            INNER JOIN TBL_PRODUCT TP ON TP.PRODUCT_ID = TI.PRODUCT_ID
+                AND TI.MAIN_IMAGE = 'Y'
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND TP.PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+
+        <choose>
+            <when test="sort == 'readCount'">
+                ORDER BY TP.PRODUCT_READ_COUNT DESC
+            </when>
+
+            <when test="sort == 'lowPrice'">
+                ORDER BY TP.PRODUCT_PRICE ASC
+            </when>
+
+            <when test="sort == 'highPrice'">
+                ORDER BY TP.PRODUCT_PRICE DESC
+            </when>
+
+            <when test="sort == 'latest'">
+                ORDER BY TP.PRODUCT_CREATE_DATE DESC
+            </when>
+
+            <otherwise>
+                ORDER BY TP.PRODUCT_ID DESC
+            </otherwise>
+        </choose>
     </select>
+
     <update id="update">
         UPDATE TBL_PRODUCT
         SET PRODUCT_STOCK=#{productStock}

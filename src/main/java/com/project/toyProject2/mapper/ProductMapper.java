@@ -1,6 +1,7 @@
 package com.project.toyProject2.mapper;
 
-import com.project.toyProject2.domain.dto.ProductListDTO;
+import com.project.toyProject2.domain.dto.product.ProductListDTO;
+import com.project.toyProject2.domain.dto.product.ProductListRequestDTO;
 import com.project.toyProject2.domain.vo.ProductVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,7 +14,7 @@ public interface ProductMapper {
 //    상품 조회
     public ProductVO selectById(Long productId);
 //    전체 상품 조회
-    public List<ProductListDTO> selectAll();
+    public List<ProductListDTO> selectAll(ProductListRequestDTO productListRequestDTO);
 //    상품 업데이트
     public void update(Long productId,Integer productStock);
 //    상품 조회수 업데이트

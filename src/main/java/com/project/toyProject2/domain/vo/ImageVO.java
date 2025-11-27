@@ -9,4 +9,5 @@ public class ImageVO {
     private String imagePath;
     private String imageType;
     private Long productId;
+    private String mainImage;
 }

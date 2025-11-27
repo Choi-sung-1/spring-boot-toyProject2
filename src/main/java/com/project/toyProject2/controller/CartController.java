@@ -1,7 +1,6 @@
 package com.project.toyProject2.controller;
 
-import com.project.toyProject2.domain.dto.CartAddDTO;
-import com.project.toyProject2.domain.dto.CartListDTO;
+import com.project.toyProject2.domain.dto.cart.CartAddDTO;
 import com.project.toyProject2.domain.vo.CartVO;
 import com.project.toyProject2.domain.vo.MemberVO;
 import com.project.toyProject2.service.CartService;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
