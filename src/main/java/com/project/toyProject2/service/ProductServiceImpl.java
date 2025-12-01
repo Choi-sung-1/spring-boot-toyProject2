@@ -1,9 +1,11 @@
 package com.project.toyProject2.service;
 
+import com.project.toyProject2.domain.dto.product.ProductDetailDTO;
 import com.project.toyProject2.domain.dto.product.ProductListDTO;
 import com.project.toyProject2.domain.dto.product.ProductListRequestDTO;
 import com.project.toyProject2.domain.vo.ImageVO;
 import com.project.toyProject2.domain.vo.ProductVO;
+import com.project.toyProject2.domain.vo.WishListVO;
 import com.project.toyProject2.repository.ImageDAO;
 import com.project.toyProject2.repository.ProductDAO;
 import com.project.toyProject2.repository.WishListDAO;
@@ -61,8 +63,23 @@ public class ProductServiceImpl implements ProductService {
     }
 //    상품 조회
     @Override
-    public ProductVO findProduct(Long id) {
-        return productDAO.selectProductById(id);
+    public ProductDetailDTO productDetailPage(Long productId,Long memberId) {
+        ProductDetailDTO productDetailDTO = new ProductDetailDTO();
+        ProductVO productVO = productDAO.selectProductById(productId);
+
+        productDetailDTO.setProductId(productVO.getProductId());
+        productDetailDTO.setProductName(productVO.getProductName());
+        productDetailDTO.setProductDescription(productVO.getProductDescription());
+        productDetailDTO.setProductPrice(productVO.getProductPrice());
+        productDetailDTO.setProductStock(productVO.getProductStock());
+
+        WishListVO findProduct = wishListDAO.selectWishProductById(memberId,productId);
+            if(findProduct==null) {
+                productDetailDTO.setWishStatus(false);
+            }else {
+                productDetailDTO.setWishStatus(true);
+            }
+        return productDetailDTO;
     }
 //    전체 상품 조회
     @Override

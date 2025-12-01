@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -30,7 +30,14 @@ public class OrderServiceImpl implements OrderService {
         orderPaymentDTO.setMemberName(member.getMemberName());
         orderPaymentDTO.setMemberLoginId(member.getMemberLoginId());
         orderPaymentDTO.setMemberPhone(member.getMemberPhone());
-        orderPaymentDTO.setCartLists(cartDAO.selectAll(member.getMemberId()));
+
+        Map<Long,CartListDTO> map = new LinkedHashMap<>();
+        for (CartListDTO cartListDTO : cartDAO.selectAll(member.getMemberId())) {
+            if (!map.containsKey(cartListDTO.getProductId())){
+                map.put(cartListDTO.getProductId(), cartListDTO);
+            }
+        }
+        orderPaymentDTO.setCartLists(new ArrayList<>(map.values()));
         orderPaymentDTO.calcTotalPrice();
         return orderPaymentDTO;
     }
@@ -39,6 +46,14 @@ public class OrderServiceImpl implements OrderService {
     public void saveOrder(OrderRequestDTO orderRequestDTO) {
         MemberVO member = memberDAO.selectMemberById(orderRequestDTO.getMemberLoginId()).get();
         List<CartListDTO> cartList = cartDAO.selectAll(member.getMemberId());
+        Map<Long,CartListDTO> map = new LinkedHashMap<>();
+        for (CartListDTO cartListDTO : cartList) {
+            if (!map.containsKey(cartListDTO.getProductId())){
+                map.put(cartListDTO.getProductId(), cartListDTO);
+            }
+        }
+        cartList = new ArrayList<>(map.values());
+
         OrderVO orderVO = new OrderVO();
 
         if (!cartList.isEmpty()) {
@@ -63,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
         orderVO.setOrderMemo(orderRequestDTO.getOrderMemo());
 
         orderDAO.insertOrder(orderVO);
+
 
         for (CartListDTO cartListDTO : cartList) {
             OrderItemVO orderItemVO = new OrderItemVO();

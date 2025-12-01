@@ -80,11 +80,17 @@ public class ProductController {
             SecurityContext context = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
             Optional<MemberVO> loginMember = memberService.findMember(context.getAuthentication().getName());
             model.addAttribute("loginMember", loginMember);
+            model.addAttribute("imagePaths", imageService.findImagePaths(productId));
+            productService.updateReadCount(productId);
+            model.addAttribute("product", productService.productDetailPage(productId, loginMember.get().getMemberId()));
+            return "product/productDetail";
+
+        }else {
+            model.addAttribute("imagePaths", imageService.findImagePaths(productId));
+            productService.updateReadCount(productId);
+            model.addAttribute("product", productService.productDetailPage(productId, null));
+            return "product/productDetail";
         }
-        model.addAttribute("imagePaths",imageService.findImagePaths(productId));
-        productService.updateReadCount(productId);
-        model.addAttribute("product", productService.findProduct(productId));
-        return "product/productDetail";
     }
     @PostMapping("/delete/{productId}")
     public String delete(@PathVariable Long productId) {

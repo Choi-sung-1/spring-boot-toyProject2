@@ -28,8 +28,6 @@ public class OrderController {
     private final MemberServiceImpl memberService;
     private final OrderServiceImpl orderService;
     private final OrderItemServiceImpl orderItemService;
-    private final ProductDAO productDAO;
-
     @GetMapping("/orderPayment")
     public String orderPayment(Model model, HttpSession session) {
         if (session.getAttribute("SPRING_SECURITY_CONTEXT")!=null){

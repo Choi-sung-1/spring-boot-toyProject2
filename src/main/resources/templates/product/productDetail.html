@@ -3,114 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <title>상품 상세</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            background: #ffffff;
+            color: #1d1d1f;
+        }
+
+        /* 상단 네비 - 애플풍 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 32px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        header nav a,
+        header a {
+            margin-left: 16px;
+            text-decoration: none;
+            color: #0066cc;
+        }
+
+        /* 전체 컨테이너 */
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 상품 이미지 */
+        .image-box {
+            text-align: center;
+        }
+
+        .image-box img {
+            width: 350px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        /* 상품 정보 */
+        .product-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 10px 0 5px;
+            text-align: center;
+        }
+
+        .product-price {
+            font-size: 22px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .product-description {
+            text-align: center;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        /* 버튼 스타일 (애플풍) */
+        .apple-btn {
+            padding: 12px 32px;
+            border-radius: 980px;
+            border: 1px solid #d2d2d7;
+            background: #f5f5f7;
+            cursor: pointer;
+            font-size: 15px;
+            transition: .25s;
+        }
+
+        .apple-btn:hover {
+            background: #e5e5e7;
+        }
+
+        .buy-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #productMenu {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        select {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            border: 1px solid #d2d2d7;
+        }
+
+        /* 하트 애니메이션 */
+        .wishlist-heart {
+            display: inline-block;
+            font-size: 32px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: transform 0.25s ease, color 0.3s ease;
+            user-select: none;
+        }
+
+        .wishlist-heart.active {
+            color: #ff3b30;
+            transform: scale(1.3);
+        }
+
+        .wishlist-heart.inactive {
+            color: #a1a1a6;
+        }
+
+        .wishlist-heart:hover {
+            transform: scale(1.15);
+        }
+
+        /* 관리자 영역 */
+        .admin-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .delete-btn {
+            background: #ff3b30;
+            color: white;
+            border: none;
+        }
+    </style>
 </head>
+
+
 <body>
 
-<!-- ===== 헤더 영역 ===== -->
 <header>
     <h1>상품 상세</h1>
+
     <nav>
         <a th:href="@{/product/list}">목록으로</a>
+        <a th:href="@{/cart/list}" th:if="${loginMember != null}">장바구니</a>
     </nav>
-
-    <!-- 로그인 상태 -->
-    <div th:if="${loginMember != null}">
-        <a th:href="@{/cart/list}">장바구니</a>
-        <h3 th:text="|권한 : ${loginMember.get().memberRole}|"></h3>
-        <h3 id="memberLoginId" th:text="|사용자 : ${loginMember.get().memberName}|"></h3>
-        <p hidden id="memberId" th:text="${loginMember.get().memberId}"></p>
-    </div>
-
-    <!-- 비로그인 상태 -->
-    <div th:if="${loginMember == null}">
-        <h3><a th:href="@{/member/login}">로그인</a> 후 이용해주세요.</h3>
-    </div>
 </header>
 
-<hr>
 
-<!-- ===== 상품 정보 영역 ===== -->
-<section th:object="${product}">
-    <input type="hidden" id="productId" th:value="*{productId}">
-    <h2 id="productName" th:text="*{productName}">상품명</h2>
-    <p>가격: <span id="productPrice" th:text="*{formatProductPrice()}">0</span>원</p>
-    <p>설명: <span th:text="*{productDescription}">상품 설명</span></p>
+<div class="container">
 
-    <!-- 상품 이미지 -->
-    <div th:if="${imagePaths != null}">
+    <div class="container">
+        <input type="hidden" id="productId" th:value="${product.productId}">
+        <p id="memberId"
+           th:attr="data-member-id=${loginMember != null ? loginMember.get().memberId : 0}"
+           hidden></p>
+
+        <!-- 상품 이미지 -->
+    <div class="image-box" th:if="${imagePaths != null}">
         <div th:each="path : ${imagePaths}">
-            <img th:src="@{|/productImages/${path}|}" alt="상품 이미지" style="max-width:200px;">
+            <img th:src="@{|/productImages/${path}|}" alt="상품 이미지">
         </div>
     </div>
-</section>
 
-<hr>
+    <!-- 상품 텍스트 영역 -->
+    <h2 id="productName" class="product-title" th:text="${product.productName}"></h2>
+    <p class="product-price" th:text="|${product.formatProductPrice()} 원|"></p>
+    <p class="product-description" th:text="${product.productDescription}"></p>
 
-<!-- ===== 재고 및 구매 버튼 ===== -->
-<section>
-    <p>
-        남은 재고:
-        <input type="text" name="productStock" th:value="${product.productStock}" readonly>
-    </p>
 
-    <div id="buyMenu">
-        <button type="button" id="buyBtn">구매하기</button>
+    <!-- 구매 버튼 -->
+    <div class="buy-section" id="buyMenu">
+        <button class="apple-btn" type="button" id="buyBtn">구매하기</button>
     </div>
-</section>
 
-<!-- ===== 구매 메뉴 (토글 영역) ===== -->
-<form method="post" id="productMenu" hidden>
-    <input type="hidden" name="productId" th:value="*{productId}">
+    <!-- 구매 옵션 -->
+    <form method="post" id="productMenu" hidden>
+        <label>수량 선택</label><br><br>
+        <select name="quantity" id="quantity" required>
+            <option value="">-- 선택 --</option>
+            <option th:each="i : ${#numbers.sequence(1, product.productStock)}"
+                    th:value="${i}"
+                    th:text="|${i}개|"></option>
+        </select>
 
-    <label for="quantity">수량 선택:</label>
-    <select name="quantity" id="quantity" required>
-        <option value="">-- 수량 선택 --</option>
-        <option th:each="i : ${#numbers.sequence(1, product.productStock)}"
-                th:value="${i}" th:text="|${i}개|"></option>
-    </select>
+        <br><br>
 
-    <br><br>
-    <button type="button" id="favoriteBtn">찜하기</button>
-    <button type="button" id="cartBtn" onclick="onClickCartBtn()">장바구니 담기</button>
-</form>
+        <!-- 하트 -->
+        <div class="wishlist-heart"
+             th:classappend="${product.wishStatus} ? 'active' : 'inactive'"
+             th:attr="data-product-id=${product.productId}"
+             onclick="onClickWishBtn(event)">
+            <span th:text="${product.wishStatus} ? '♥' : '♡'"></span>
+        </div>
 
-<hr>
+        <br>
 
-<!-- ===== 관리자 전용 영역 ===== -->
-<section th:if="${loginMember != null and loginMember.get().memberRole == 'ADMIN'}">
-    <form th:action="@{/product/delete/{productId}(productId=${product.productId})}" method="post"
-          onsubmit="return confirm('정말 삭제하시겠습니까?')">
-        <button type="submit">상품 삭제</button>
+        <button class="apple-btn" type="button" onclick="onClickCartBtn()">장바구니 담기</button>
     </form>
-</section>
 
-<!-- ===== 스크립트 ===== -->
+
+    <!-- 관리자 전용 -->
+    <div class="admin-section"
+         th:if="${loginMember != null && loginMember.get().memberRole == 'ADMIN'}">
+        <form th:action="@{/product/delete/{productId}(productId=${product.productId})}" method="post"
+              onsubmit="return confirm('정말 삭제하시겠습니까?')">
+            <button class="apple-btn delete-btn" type="submit">상품 삭제</button>
+        </form>
+    </div>
+
+</div>
+
 <script th:inline="javascript">
-    document.addEventListener("DOMContentLoaded", function() {
-        const favoriteBtn = document.getElementById("favoriteBtn");
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const isLogin = /*[[${loginMember != null}]]*/ false;
         const buyBtn = document.getElementById("buyBtn");
         const productMenu = document.getElementById("productMenu");
         const buyMenu = document.getElementById("buyMenu");
 
-        // 로그인 여부 확인
-        const isLogin = /*[[${loginMember != null}]]*/ false;
-
         buyBtn.addEventListener("click", () => {
             if (!isLogin) {
                 alert("로그인 후 이용해주세요.");
-                window.location.href = /*[[@{/member/login}]]*/ "/member/login";
+                window.location.href = "/member/login";
                 return;
             }
+
             productMenu.hidden = !productMenu.hidden;
             buyMenu.hidden = !buyMenu.hidden;
         });
     });
 
-    // 장바구니 버튼 클릭 시
+    function onClickWishBtn(e) {
+        const heart = e.currentTarget;
+        const productId = heart.dataset.productId;
+        const memberId = document.getElementById("memberId").dataset.memberId;
+
+        fetch('/wishList/addFetch', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                memberId: Number(memberId),
+                productId: Number(productId)
+            })
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result) {
+                    heart.classList.add("active");
+                    heart.classList.remove("inactive");
+                    heart.textContent = "♥";
+                } else {
+                    heart.classList.add("inactive");
+                    heart.classList.remove("active");
+                    heart.textContent = "♡";
+                }
+            });
+    }
+
+
+    // 🛒 장바구니 추가
     function onClickCartBtn() {
         const productId = document.getElementById("productId").value;
-        const productName = document.getElementById("productName")?.innerText || "";
-        const memberId = document.getElementById("memberId").innerText.trim();
+        const productName = document.getElementById("productName")?.innerText || '';
+        const memberId = document.getElementById("memberId").dataset.memberId;
         const quantity = document.getElementById("quantity").value;
 
         if (!quantity) {
@@ -123,21 +285,16 @@
         fetch("/cart/add", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ productId, memberId, quantity })
+            body: JSON.stringify({productId, memberId, quantity})
         })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(msg => { throw new Error(msg) });
-                }
-                return response.text();
+            .then(res => {
+                if (!res.ok) return res.text().then(msg => { throw new Error(msg); });
+                return res.text();
             })
-            .then(msg => {
-                alert(msg); // 장바구니에 상품이 추가되었습니다.
-            })
-            .catch(err => {
-                alert(err.message); // 이미 장바구니에 담긴 상품입니다.
-            });
+            .then(alert)
+            .catch(err => alert(err.message));
     }
 </script>
+
 </body>
 </html>

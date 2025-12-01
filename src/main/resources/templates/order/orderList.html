@@ -4,40 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>주문 목록</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 40px 24px;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0071e3;
+            font-size: 15px;
+        }
+
+        .order-table-wrapper {
+            margin-top: 30px;
+            background: #ffffff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        thead {
+            background: #fafafa;
+            border-bottom: 1px solid #e2e2e2;
+        }
+
+        th {
+            padding: 14px 12px;
+            font-weight: 600;
+            text-align: left;
+            color: #555;
+        }
+
+        td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status {
+            font-weight: 600;
+            color: #0071e3;
+        }
+
+        .detail-btn a {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 12px;
+            background: #0071e3;
+            color: white;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .detail-btn a:hover {
+            background: #005bbd;
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 16px;
+            color: #999;
+        }
+    </style>
 </head>
 <body>
 
-<h1>주문 목록</h1>
-<!--회원정보 추가해야함-->
+<h1>🧾 주문 목록</h1>
 <a href="/">← 메인으로</a>
 
-<table border="1" width="100%" style="border-collapse: collapse; margin-top: 20px;">
-    <thead>
-    <tr>
-        <th>주문번호</th>
-        <th>주문 요약</th>
-        <th>주문 날짜</th>
-        <th>결제 금액</th>
-        <th>상태</th>
-        <th>상세보기</th>
-    </tr>
-    </thead>
+<div class="order-table-wrapper">
+    <table>
+        <thead>
+        <tr>
+            <th>주문번호</th>
+            <th>주문 요약</th>
+            <th>주문 날짜</th>
+            <th>결제 금액</th>
+            <th>상태</th>
+            <th>상세보기</th>
+        </tr>
+        </thead>
 
-    <tbody>
-    <tr  th:if="!${orderList.isEmpty()}" th:each="order:${orderList}">
-        <td th:text="${order.orderId}">1</td>
-        <td th:text="${order.orderSummary}">키보드 외 2건</td>
-        <td th:text="${order.formatOrderDate()}">2025-01-01 10:20</td>
-        <td th:text="|${order.formatOrderTotalPayment()}원|">59,000원</td>
-        <td th:text="${order.orderStatus}">배송 준비중</td>
-        <td><a th:href="@{/order/orderDetail/{orderId}(orderId=${order.orderId})}">보기</a></td>
-    </tr>
-    <!-- 데이터가 없을 때 예시 -->
-    <tr th:unless="!${orderList.isEmpty()}">
-        <td colspan="6">주문 내역이 없습니다.</td>
-    </tr>
-    </tbody>
-</table>
+        <tbody>
+        <tr th:if="!${orderList.isEmpty()}" th:each="order:${orderList}">
+            <td th:text="${order.orderId}"></td>
+            <td th:text="${order.orderSummary}"></td>
+            <td th:text="${order.formatOrderDate()}"></td>
+            <td th:text="|${order.formatOrderTotalPayment()}원|"></td>
+            <td class="status" th:text="${order.orderStatus}"></td>
+            <td class="detail-btn">
+                <a th:href="@{/order/orderDetail/{orderId}(orderId=${order.orderId})}">보기</a>
+            </td>
+        </tr>
+
+        <tr th:unless="!${orderList.isEmpty()}">
+            <td colspan="6" class="empty-row">주문 내역이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

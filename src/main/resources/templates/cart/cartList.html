@@ -4,20 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>장바구니</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif;
+            background: #fafafa;
+            color: #1d1d1f;
+        }
+
+        h1 {
+            font-weight: 600;
+            padding: 20px 24px;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-left: 24px;
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        a.back-link:hover { text-decoration: underline; }
+
+        #emptyCartMessage {
+            padding: 60px 0;
+            font-size: 20px;
+            color: #6e6e73;
+        }
+
+        table {
+            width: 95%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        thead {
+            background: #f5f5f7;
+            font-size: 15px;
+        }
+
+        thead th {
+            padding: 14px 10px;
+            font-weight: 600;
+            color: #86868b;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e5e5e5;
+            transition: background .15s;
+        }
+        tbody tr:hover { background: #f9f9fb; }
+
+        td {
+            padding: 16px 12px;
+            font-size: 15px;
+            vertical-align: middle;
+        }
+
+        img {
+            width: 90px;
+            border-radius: 10px;
+        }
+
+        input[type="number"] {
+            width: 70px;
+            padding: 6px;
+            font-size: 15px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            outline: none;
+            transition: border .15s;
+        }
+        input[type="number"]:focus {
+            border-color: #007aff;
+        }
+
+        button, a#paymentBtn {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background .2s;
+        }
+
+        #paymentBtn {
+            background: #0071e3;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+        #paymentBtn:hover { background: #0077ed; }
+
+        #rmvCartBtn {
+            background: #e5e5ea;
+            margin-left: 10px;
+        }
+        #rmvCartBtn:hover { background: #d9d9de; }
+
+        #productDelBtn {
+            background: #ff3b30;
+            color: white;
+        }
+        #productDelBtn:hover { background: #ff453a; }
+
+        section {
+            width: 95%;
+            margin: 25px auto 60px;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        section h3 {
+            margin-top: 0;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+
+        #allProductPrice {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+    </style>
 </head>
 <body>
 
 <h1>🛒 장바구니</h1>
-<a href="/product/list">← 상품 목록으로</a>
+<a href="/product/list" class="back-link">← 상품 목록으로</a>
+
 <p hidden="hidden" id="memberId" th:text="${loginMember.get().memberId}"></p>
 <hr>
 
-<div th:attr="hidden=${!cartList.isEmpty()}" id="emptyCartMessage" style="text-align:center; padding:30px;">
+<div th:attr="hidden=${!cartList.isEmpty()}" id="emptyCartMessage" style="text-align:center;">
     🛒 장바구니가 비어 있습니다.<br>
     상품을 추가해보세요!
 </div>
 
-<table border="1" width="100%" cellspacing="0" cellpadding="8" th:if="${!cartList.isEmpty()}" id="cartListTable">
+<table th:if="${!cartList.isEmpty()}" id="cartListTable">
     <thead>
     <tr>
         <th>상품 이미지</th>
@@ -34,12 +170,12 @@
         <td>
             <figure>
                 <a th:href="@{/product/detail/{productId}(productId=${item.productId})}">
-                <img th:src="@{|/productImages/${item.imageOriginalName}|}" alt="무선 이어폰 V1" width="100">
+                    <img th:src="@{|/productImages/${item.imageOriginalName}|}" alt="상품 이미지">
                 </a>
             </figure>
         </td>
-        <td id="productName" th:text="${item.productName}">무선 이어폰 V1</td>
-        <td id="productPrice" th:text="|${item.formatProductPrice()}원|">₩79,000</td>
+        <td id="productName" th:text="${item.productName}"></td>
+        <td id="productPrice" th:text="|${item.formatProductPrice()}원|"></td>
         <td><input id="productSelect" type="number" th:value="${item.cartQuantity}" min="1" th:max="${item.productStock}"></td>
         <td id="productTotalPrice" th:text="|${item.formatTotalPrice()}원|"></td>
         <td><button id="productDelBtn" type="button">삭제</button></td>
@@ -50,7 +186,6 @@
 
 <hr>
 
-<!-- 총합 영역 -->
 <section>
     <h3>결제 정보</h3>
     <p id="allProductPrice">상품 합계: ₩149,000</p>
@@ -59,6 +194,8 @@
 </section>
 
 </body>
+</html>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const rows = document.querySelectorAll("tbody tr");
@@ -174,4 +311,3 @@
 </script>
 
 
-</html>

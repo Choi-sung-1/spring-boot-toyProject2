@@ -1,24 +1,68 @@
- <!DOCTYPE HTML>
-   <html xmlns:th="http://www.thymeleaf.org">
- <head>
-     <meta charset="UTF-8">
-     <title>쇼핑몰 홈</title>
- </head>
-     <body>
-         <h1>🛍️ 쇼핑몰</h1>
-         <nav>
-             <a th:href="@{/product/list}">상품 목록</a> |
-             <a th:href="@{/cart/list}">장바구니</a> |
-             <a th:href="@{/order/orderList}">주문 내역</a>
-             <a th:href="@{/member/logout}" th:if="${loginUser}!=null">로그아웃</a>
-         </nav>
-         <div th:if="${loginUser}==null">
-             <p>환영합니다! 원하는 상품을 둘러보세요.</p>
-             <p><a th:href="@{/member/login}">로그인</a> 후 이용해주세요.</p>
-             <p><a th:href="@{/member/join}">회원가입</a></p>
-         </div>
-         <div th:if="${loginUser}!=null">
-             <p>환영합니다 <span th:text="${loginUser.getUsername()}">USERNAME</span>님! 원하는 상품을 둘러보세요.</p>
-         </div>
-     </body>
- </html>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>쇼핑몰 홈</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            background: #fafafa;
+            color: #1d1d1f;
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        nav {
+            background: #fff;
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 20px;
+            font-size: 16px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #0071e3;
+            font-weight: 500;
+        }
+        .welcome-box {
+            margin-top: 30px;
+            background: #fff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            font-size: 17px;
+            line-height: 1.5;
+        }
+        .welcome-box a {
+            color: #0071e3;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<h1>🛍️ 쇼핑몰</h1>
+
+<nav>
+    <a th:href="@{/product/list}">상품 목록</a>
+    <a th:href="@{/cart/list}">장바구니</a>
+    <a th:href="@{/order/orderList}">주문 내역</a>
+    <a th:href="@{/member/logout}" th:if="${loginUser}!=null">로그아웃</a>
+</nav>
+
+<div class="welcome-box" th:if="${loginUser}==null">
+    <p>환영합니다! 원하는 상품을 둘러보세요.</p>
+    <p><a th:href="@{/member/login}">로그인</a> 후 이용해주세요.</p>
+    <p><a th:href="@{/member/join}">회원가입</a></p>
+</div>
+
+<div class="welcome-box" th:if="${loginUser}!=null">
+    <p>환영합니다 <strong th:text="${loginUser.getUsername()}">USERNAME</strong>님! 원하는 상품을 둘러보세요.</p>
+</div>
+</body>
+</html>

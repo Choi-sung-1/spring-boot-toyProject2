@@ -2,21 +2,83 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>로그인</title>
+    <title>Apple Login</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+            background: #f5f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-card {
+            background: white;
+            width: 360px;
+            padding: 40px 32px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+        h2 {
+            font-weight: 600;
+            margin-bottom: 28px;
+            color: #1d1d1f;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            box-sizing: border-box;
+            background: #fafafa;
+            height: 48px;
+        }
+        input:focus {
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0,113,227,0.15);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 12px;
+            background: #0071e3;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        button:hover {
+            background: #0a84ff;
+        }
+        a {
+            display: block;
+            margin-top: 16px;
+            color: #0071e3;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-<div class="login-container">
+<div class="login-card">
     <h2>로그인</h2>
     <form method="post" action="/member/login" th:object="${memberVO}">
-        <input type="text" name="memberLoginId" th:field="*{memberLoginId}" placeholder="아이디" required>
+        <input type="text" name="memberLoginId" th:field="*{memberLoginId}" placeholder="LOGIN ID" required>
         <input type="password" name="memberPassword" th:field="*{memberPassword}" placeholder="비밀번호" required>
         <button type="submit">로그인</button>
-
     </form>
-    <a th:href="@{/member/join}">회원가입</a>
-
+    <a th:href="@{/member/join}">ID가 없으신가요?</a>
 </div>
 </body>
 </html>

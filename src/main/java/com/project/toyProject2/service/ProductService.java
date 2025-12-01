@@ -1,4 +1,5 @@
 package com.project.toyProject2.service;
+import com.project.toyProject2.domain.dto.product.ProductDetailDTO;
 import com.project.toyProject2.domain.dto.product.ProductListDTO;
 import com.project.toyProject2.domain.dto.product.ProductListRequestDTO;
 import com.project.toyProject2.domain.vo.ProductVO;
@@ -10,7 +11,7 @@ public interface ProductService {
 //    상품 등록
     public void saveProduct(ProductVO productVO, MultipartFile[] files);
 //    상품 조회
-    public ProductVO findProduct(Long id);
+    public ProductDetailDTO productDetailPage(Long productId,Long memberId);
 //    상품 전체 조회
     public List<ProductListDTO> findAllProduct(ProductListRequestDTO productListRequestDTO);
 //    상품 업데이트
