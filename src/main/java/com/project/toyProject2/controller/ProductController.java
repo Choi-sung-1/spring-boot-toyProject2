@@ -4,9 +4,11 @@ import com.project.toyProject2.domain.dto.product.ProductListDTO;
 import com.project.toyProject2.domain.dto.product.ProductListRequestDTO;
 import com.project.toyProject2.domain.vo.MemberVO;
 import com.project.toyProject2.domain.vo.ProductVO;
+import com.project.toyProject2.domain.vo.WishListVO;
 import com.project.toyProject2.service.ImageService;
 import com.project.toyProject2.service.MemberService;
 import com.project.toyProject2.service.ProductService;
+import com.project.toyProject2.service.WishListService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,22 +30,39 @@ public class ProductController {
     private final ImageService imageService;
     private final ProductService productService;
     private final MemberService memberService;
+    private final WishListService wishListService;
 
     @GetMapping("/list")
     public String list(Model model, HttpSession session,
                        ProductListRequestDTO productListRequestDTO) {
 
-        if (session.getAttribute("SPRING_SECURITY_CONTEXT")!=null){
-            SecurityContext context = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
+        if (session.getAttribute("SPRING_SECURITY_CONTEXT")!=null) {
+            SecurityContext context = (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
             Optional<MemberVO> loginMember = memberService.findMember(context.getAuthentication().getName());
             model.addAttribute("loginMember", loginMember);
+
+
+            List<ProductListDTO> productList = productService.findAllProduct(productListRequestDTO);
+            for (ProductListDTO productListDTO : productList) {
+                Long productId = productListDTO.getProductId();
+                WishListVO findProduct = wishListService.findWishProductById(loginMember.get().getMemberId(), productId);
+                if(findProduct==null) {
+                    productListDTO.setWishStatus(false);
+                }else {
+                    productListDTO.setWishStatus(true);
+                }
+            }
+            model.addAttribute("productList", productList);
+            model.addAttribute("productListRequestDTO", productListRequestDTO);
+            return "product/productList";
+        }else {
+            List<ProductListDTO> productList = productService.findAllProduct(productListRequestDTO);
+
+            model.addAttribute("productList", productList);
+            model.addAttribute("productListRequestDTO", productListRequestDTO);
+            return "product/productList";
+
         }
-
-        List<ProductListDTO> productList = productService.findAllProduct(productListRequestDTO);
-
-        model.addAttribute("productList", productList);
-        model.addAttribute("productListRequestDTO", productListRequestDTO);
-        return "product/productList";
     }
     @GetMapping("/form")
     public String form(Model model) {

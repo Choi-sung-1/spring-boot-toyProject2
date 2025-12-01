@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>위시리스트</title>
+</head>
+
+<body>
+<!--
+타임리프 적용해야함
+
+
+
+-->
+<div>
+    <a th:href="@{/product/list}">← 상품 목록으로</a>
+</div>
+
+<h1>찜한 상품</h1>
+<div>
+    <!-- 찜 상품 카드 예시 1 -->
+    <div>
+        <img src="https://via.placeholder.com/160" alt="상품 이미지">
+        <div>상품명 예시 1</div>
+        <div>25,000원</div>
+        <a href="#">찜 해제</a>
+    </div>
+
+    <!-- 찜 상품 카드 예시 2 -->
+    <div>
+        <img src="https://via.placeholder.com/160" alt="상품 이미지">
+        <div>상품명 예시 2</div>
+        <div>40,000원</div>
+        <a href="#">찜 해제</a>
+    </div>
+
+    <!-- 찜 상품 카드 예시 3 -->
+    <div>
+        <img src="https://via.placeholder.com/160" alt="상품 이미지">
+        <div>상품명 예시 3</div>
+        <div>19,900원</div>
+        <a href="#">찜 해제</a>
+    </div>
+
+</div>
+
+</body>
+</html>

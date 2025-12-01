@@ -100,6 +100,7 @@
             background: white;
             text-align: center;
             transition: 0.2s;
+            position: relative;
         }
 
         .product-card:hover {
@@ -144,16 +145,30 @@
             font-size: 13px;
             text-decoration: none;
         }
+        .wishlist-heart {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            font-size: 25px;
+            color: gray;
+            cursor: pointer;
+            z-index: 5;
+            user-select: none;
+            transition: 0.15s;
+        }
 
+        .wishlist-heart:hover {
+            transform: scale(1.15);
+        }
     </style>
 </head>
 
 <body>
 
 <div class="top-nav">
-    <h1>상품 목록</h1>
+    <h1><a th:href="@{/}">쇼핑몰</a></h1>
     <div class="nav-right">
-        <a th:href="@{/}">홈</a>
+        <a th:href="@{/wishList/list}">좋아요</a>
         <a th:href="@{/cart/list}">장바구니</a>
         <a th:href="@{/order/orderList}">주문내역</a>
     </div>
@@ -162,6 +177,7 @@
 <div th:if="${loginMember} != null" class="member-box">
     <p><strong th:text="${loginMember.get().memberName}"></strong>님 환영합니다</p>
     <p style="margin-top:2px;" th:text="|권한 : ${loginMember.get().memberRole}|"></p>
+    <p id="memberId" th:attr="data-member-id=${loginMember.get().memberId}" hidden="hidden"></p>
 </div>
 
 <div th:if="${loginMember} == null" class="member-box">
@@ -184,8 +200,16 @@
 
 <div class="product-grid">
     <div class="product-card" th:each="product : ${productList}">
-        <img th:src="@{|/productImages/${product.imageOriginalName}|}" alt="상품 이미지">
 
+        <div class="wishlist-heart"
+             th:attr="data-product-id=${product.productId}"
+             th:onclick="'onClickWishBtn(event)'"
+             th:style="${product.wishStatus} ? 'color:red' : ''">
+            <span th:text="${product.wishStatus} ? '♥' : '♡'"></span>
+        </div>
+
+
+        <img th:src="@{|/productImages/${product.imageOriginalName}|}" alt="상품 이미지">
         <div class="product-name" th:text="${product.productName}"></div>
         <div class="read-count">조회수 <span th:text="${product.productReadCount}"></span></div>
         <div class="price" th:text="${product.formatProductPrice()}"></div>
@@ -198,4 +222,40 @@
 </div>
 
 </body>
+
+<script th:inline="javascript">
+<!--    wishlist 비동기 Fetch 작성-->
+    function onClickWishBtn(event) {
+        const isLogin = /*[[${loginMember != null}]]*/ false;
+        if (!isLogin){
+            alert("로그인 후 이용해주세요.");
+            window.location.href = /*[[@{/member/login}]]*/ "/member/login";
+            return;
+        }
+
+        const heart = event.currentTarget;   // 클릭된 하트 요소
+        const productId = heart.dataset.productId;
+        const memberId = document.getElementById('memberId').dataset.memberId;
+
+    fetch('/wishList/addFetch', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+            memberId: Number(memberId),
+            productId: Number(productId)
+        })
+    })
+        .then(response => response.json())
+        .then(result => {
+            if (result === true) {
+                heart.textContent = '♥';
+                heart.style.color = 'red';
+            } else {
+                heart.textContent = '♡';
+                heart.style.color = 'gray';
+            }
+        });
+}
+
+</script>
 </html>

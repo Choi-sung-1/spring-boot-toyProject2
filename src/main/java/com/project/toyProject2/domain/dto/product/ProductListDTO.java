@@ -14,8 +14,7 @@ public class ProductListDTO {
     private Integer productReadCount;
     private LocalDateTime productCreateDate;
     private String imageOriginalName;
-
-
+    private Boolean wishStatus;
     public String formatProductPrice() {
         NumberFormat format = NumberFormat.getCurrencyInstance(Locale.KOREA);
         return format.format(productPrice);

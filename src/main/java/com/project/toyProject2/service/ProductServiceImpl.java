@@ -6,6 +6,7 @@ import com.project.toyProject2.domain.vo.ImageVO;
 import com.project.toyProject2.domain.vo.ProductVO;
 import com.project.toyProject2.repository.ImageDAO;
 import com.project.toyProject2.repository.ProductDAO;
+import com.project.toyProject2.repository.WishListDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import java.util.*;
 public class ProductServiceImpl implements ProductService {
     private final ProductDAO productDAO;
     private final ImageDAO imageDAO;
+    private final WishListDAO wishListDAO;
 //    상품 등록
     @Override
     public void saveProduct(ProductVO productVO, MultipartFile[] files) {
@@ -65,9 +67,7 @@ public class ProductServiceImpl implements ProductService {
 //    전체 상품 조회
     @Override
     public List<ProductListDTO> findAllProduct(ProductListRequestDTO productListRequestDTO) {
-        List<ProductListDTO> findAll = productDAO.selectAllProducts(productListRequestDTO);
-        //중복 수정필요
-        return findAll;
+        return productDAO.selectAllProducts(productListRequestDTO);
     }
 //    상품 업데이트
     @Override
