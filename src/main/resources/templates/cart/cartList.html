@@ -302,12 +302,18 @@
 
     function confirmPaymentRedirect(event) {
         // 기본 이동 막기
+
         event.preventDefault();
+        const emptyCartDiv = document.getElementById('emptyCartMessage');
+        if(emptyCartDiv.hidden === false){
+            alert("결제할 상품이 없습니다.");
+            window.location.href = "/product/list";
+            return;
+        }
         if (confirm("결제 페이지로 이동하시겠습니까?")) {
             window.location.href = "/order/orderPayment";
         }
     }
-
 </script>
 
 

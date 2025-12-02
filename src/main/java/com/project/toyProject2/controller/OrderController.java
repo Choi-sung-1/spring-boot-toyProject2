@@ -58,7 +58,6 @@ public class OrderController {
         OrderVO order = orderService.findOrder(orderId);
         MemberVO member = memberService.findMemberByPk(order.getMemberId());
         List<OrderItemDetailDTO> orderItems = orderItemService.findOrderItemById(orderId);
-        log.info(orderItems.toString());
         model.addAttribute("order", order);
         model.addAttribute("member", member);
         model.addAttribute("orderItems", orderItems);

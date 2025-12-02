@@ -1,5 +1,6 @@
 package com.project.toyProject2.service;
 
+import com.project.toyProject2.domain.dto.wishList.WishListPageDTO;
 import com.project.toyProject2.domain.vo.WishListVO;
 import com.project.toyProject2.repository.WishListDAO;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class WishListServiceImpl implements WishListService {
     }
 
     @Override
-    public List<WishListVO> getWishListByMemberId(Long memberId) {
+    public List<WishListPageDTO> getWishListByMemberId(Long memberId) {
         return wishListDAO.selectAllByMemberId(memberId);
     }
 

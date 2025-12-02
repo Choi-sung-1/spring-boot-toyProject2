@@ -1,5 +1,6 @@
 package com.project.toyProject2.repository;
 
+import com.project.toyProject2.domain.dto.wishList.WishListPageDTO;
 import com.project.toyProject2.domain.vo.WishListVO;
 import com.project.toyProject2.mapper.WishListMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class WishListDAO {
     public WishListVO selectWishProductById(Long memberId,Long productId) {
         return wishListMapper.selectWishProduct(memberId,productId);
     }
-    public List<WishListVO> selectAllByMemberId(Long memberId){
+    public List<WishListPageDTO> selectAllByMemberId(Long memberId){
         return wishListMapper.selectAllByMemberId(memberId);
     }
     public void deleteWishProductById(Long memberId,Long productId) {

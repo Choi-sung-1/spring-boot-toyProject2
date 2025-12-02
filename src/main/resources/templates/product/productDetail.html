@@ -141,10 +141,25 @@
             color: white;
             border: none;
         }
+        /*toast 알림창*/
+        #toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 6px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            z-index: 9999;
+        }
+        #toast.show {
+            opacity: 1;
+        }
     </style>
 </head>
-
-
 <body>
 
 <header>
@@ -158,7 +173,7 @@
 
 
 <div class="container">
-
+    <div id="toast"></div>
     <div class="container">
         <input type="hidden" id="productId" th:value="${product.productId}">
         <p id="memberId"
@@ -259,10 +274,12 @@
                     heart.classList.add("active");
                     heart.classList.remove("inactive");
                     heart.textContent = "♥";
+                    showToast('찜한 상품에 추가되었습니다.')
                 } else {
                     heart.classList.add("inactive");
                     heart.classList.remove("active");
                     heart.textContent = "♡";
+                    showToast('찜한 상품에서 삭제되었습니다.')
                 }
             });
     }
@@ -294,6 +311,17 @@
             .then(alert)
             .catch(err => alert(err.message));
     }
+    // toast 알림 함수
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2000);
+    }
+
 </script>
 
 </body>

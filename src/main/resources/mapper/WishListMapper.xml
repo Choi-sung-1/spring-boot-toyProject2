@@ -10,11 +10,15 @@
         WHERE MEMBER_ID = #{memberId} AND PRODUCT_ID = #{productId}
     </select>
     <select id="selectAllByMemberId">
-        SELECT * FROM TBL_WISHLIST
-        WHERE MEMBER_ID = #{memberId}
+        SELECT TI.IMAGE_ORIGINAL_NAME,TP.PRODUCT_ID,TP.PRODUCT_NAME,TP.PRODUCT_PRICE,TP.PRODUCT_READ_COUNT FROM TBL_WISHLIST TW
+          INNER JOIN TBL_PRODUCT TP ON TP.PRODUCT_ID = TW.PRODUCT_ID
+            INNER JOIN TBL_IMAGES TI on TP.PRODUCT_ID = TI.PRODUCT_ID
+        WHERE MEMBER_ID=#{memberId} AND TI.MAIN_IMAGE = 'Y'
+        ORDER BY TW.WISHLIST_CREATE_DATE DESC
     </select>
     <delete id="delete">
         DELETE FROM TBL_WISHLIST
         WHERE MEMBER_ID=#{memberId} AND PRODUCT_ID=#{productId}
     </delete>
+
 </mapper>

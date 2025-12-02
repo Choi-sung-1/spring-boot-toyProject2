@@ -145,6 +145,7 @@
             font-size: 13px;
             text-decoration: none;
         }
+        /*위시리스트 하트 */
         .wishlist-heart {
             position: absolute;
             top: 10px;
@@ -159,6 +160,23 @@
 
         .wishlist-heart:hover {
             transform: scale(1.15);
+        }
+        /*toast 알림창*/
+        #toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 6px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            z-index: 9999;
+        }
+        #toast.show {
+            opacity: 1;
         }
     </style>
 </head>
@@ -198,6 +216,8 @@
     <button type="submit" class="search-btn">검색</button>
 </form>
 
+
+<div id="toast"></div>
 <div class="product-grid">
     <div class="product-card" th:each="product : ${productList}">
 
@@ -224,7 +244,7 @@
 </body>
 
 <script th:inline="javascript">
-<!--    wishlist 비동기 Fetch 작성-->
+<!--    위시리스트 버튼 함수-->
     function onClickWishBtn(event) {
         const isLogin = /*[[${loginMember != null}]]*/ false;
         if (!isLogin){
@@ -250,11 +270,23 @@
             if (result === true) {
                 heart.textContent = '♥';
                 heart.style.color = 'red';
+                showToast('찜한 상품에 추가되었습니다.')
             } else {
                 heart.textContent = '♡';
                 heart.style.color = 'gray';
+                showToast('찜한 상품에서 삭제되었습니다.')
             }
         });
+}
+// toast 알림 함수
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2000);
 }
 
 </script>

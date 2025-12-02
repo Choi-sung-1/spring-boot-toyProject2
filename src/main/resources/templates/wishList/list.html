@@ -3,46 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <title>위시리스트</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px 40px;
+            font-family: system-ui, sans-serif;
+            background: #fafafa;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            margin-bottom: 20px;
+            display: inline-block;
+            color: #444;
+            text-decoration: none;
+        }
+
+        .wishlist-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .wishlist-card {
+            width: 260px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            position: relative; /* 하트 위치를 위해 필요 */
+        }
+
+        .wishlist-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .wishlist-heart {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            font-size: 25px;
+            color: red;
+            cursor: pointer;
+            z-index: 5;
+            user-select: none;
+            transition: 0.15s;
+        }
+
+        .wishlist-heart:hover {
+            transform: scale(1.15);
+        }
+
+        .product-name {
+            font-size: 17px;
+            font-weight: bold;
+            margin: 12px 0 8px;
+        }
+
+        .price {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .rating {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        /*toast 알림창*/
+        #toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 6px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            z-index: 9999;
+        }
+        #toast.show {
+            opacity: 1;
+        }
+
+    </style>
 </head>
 
 <body>
-<!--
-타임리프 적용해야함
 
-
-
--->
-<div>
-    <a th:href="@{/product/list}">← 상품 목록으로</a>
-</div>
+<a class="back-link" th:href="@{/product/list}">← 상품 목록으로</a>
+<p id="memberId" th:attr="data-member-id=${loginMember.get().memberId}" hidden="hidden"></p>
 
 <h1>찜한 상품</h1>
-<div>
-    <!-- 찜 상품 카드 예시 1 -->
-    <div>
-        <img src="https://via.placeholder.com/160" alt="상품 이미지">
-        <div>상품명 예시 1</div>
-        <div>25,000원</div>
-        <a href="#">찜 해제</a>
-    </div>
+<div id="toast"></div>
+<div class="wishlist-grid">
 
-    <!-- 찜 상품 카드 예시 2 -->
-    <div>
-        <img src="https://via.placeholder.com/160" alt="상품 이미지">
-        <div>상품명 예시 2</div>
-        <div>40,000원</div>
-        <a href="#">찜 해제</a>
-    </div>
+    <div class="wishlist-card" th:each="wish : ${wishList}">
 
-    <!-- 찜 상품 카드 예시 3 -->
-    <div>
-        <img src="https://via.placeholder.com/160" alt="상품 이미지">
-        <div>상품명 예시 3</div>
-        <div>19,900원</div>
-        <a href="#">찜 해제</a>
-    </div>
+        <div class="wishlist-heart"
+             th:attr="data-product-id=${wish.productId}"
+             th:style="${wish.wishStatus} ? 'color:red' : 'color:gray'"
+             onclick="onClickWishBtn(this)">
+            <span th:text="${wish.wishStatus} ? '♥' : '♡'"></span>
+        </div>
 
+        <a th:href="@{/product/detail/{id}(id=${wish.productId})}">
+            <img th:src="@{|/productImages/${wish.imageOriginalName}|}" alt="상품 이미지">
+        </a>
+
+        <div class="product-name" th:text="${wish.productName}"></div>
+
+        <div class="price">
+            <span th:text="${#numbers.formatInteger(wish.productPrice, 3, 'COMMA')} + '원'"></span>
+        </div>
+
+        <div class="rating">
+            조회수 <span th:text="${wish.productReadCount}"></span>
+        </div>
+
+    </div>
 </div>
+
+<script>
+    <!--    위시리스트 버튼 함수-->
+    function onClickWishBtn(heartDiv) {
+        const productId = heartDiv.dataset.productId;
+        const memberId = document.getElementById('memberId').dataset.memberId;
+        const heartIcon = heartDiv.querySelector("span");
+
+        fetch('/wishList/addFetch', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                memberId: Number(memberId),
+                productId: Number(productId)
+            })
+        })
+            .then(response => response.json())
+            .then(result => {
+                const isWished = (result === true || result === "true");
+
+                if (isWished) {
+                    heartIcon.textContent = '♥';
+                    heartDiv.style.color = 'red';
+                    showToast('찜한 상품에 추가되었습니다.')
+                } else {
+                    heartIcon.textContent = '♡';
+                    heartDiv.style.color = 'gray';
+                    showToast('찜한 상품에서 삭제되었습니다.')
+                }
+            });
+    }
+    // toast 알림 함수
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2000);
+    }
+</script>
 
 </body>
 </html>
