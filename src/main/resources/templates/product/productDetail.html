@@ -13,7 +13,6 @@
             color: #1d1d1f;
         }
 
-        /* 상단 네비 - 애플풍 */
         header {
             display: flex;
             justify-content: space-between;
@@ -34,14 +33,12 @@
             color: #0066cc;
         }
 
-        /* 전체 컨테이너 */
         .container {
             max-width: 980px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
-        /* 상품 이미지 */
         .image-box {
             text-align: center;
         }
@@ -54,7 +51,6 @@
             margin-bottom: 20px;
         }
 
-        /* 상품 정보 */
         .product-title {
             font-size: 32px;
             font-weight: 600;
@@ -76,7 +72,6 @@
             margin-bottom: 40px;
         }
 
-        /* 버튼 스타일 (애플풍) */
         .apple-btn {
             padding: 12px 32px;
             border-radius: 980px;
@@ -91,11 +86,6 @@
             background: #e5e5e7;
         }
 
-        .buy-section {
-            text-align: center;
-            margin-top: 20px;
-        }
-
         #productMenu {
             text-align: center;
             margin-top: 20px;
@@ -108,19 +98,16 @@
             border: 1px solid #d2d2d7;
         }
 
-        /* 하트 애니메이션 */
         .wishlist-heart {
             display: inline-block;
             font-size: 32px;
             cursor: pointer;
-            margin: 20px 0;
             transition: transform 0.25s ease, color 0.3s ease;
             user-select: none;
         }
 
         .wishlist-heart.active {
             color: #ff3b30;
-            transform: scale(1.3);
         }
 
         .wishlist-heart.inactive {
@@ -131,17 +118,14 @@
             transform: scale(1.15);
         }
 
-        /* 관리자 영역 */
-        .admin-section {
-            text-align: center;
-            margin-top: 40px;
+        .wishlist-cart-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
         }
-        .delete-btn {
-            background: #ff3b30;
-            color: white;
-            border: none;
-        }
-        /*toast 알림창*/
+
         #toast {
             position: fixed;
             top: 20px;
@@ -155,106 +139,99 @@
             transition: opacity 0.4s ease;
             z-index: 9999;
         }
-        #toast.show {
-            opacity: 1;
+        #toast.show { opacity: 1; }
+
+        .review-link {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
         }
+        .review-link>a{
+            text-decoration: none;
+         }
+        .stars {
+            color: #ffd700;
+            font-size: 22px;
+            margin-left: 8px;
+        }
+        .quantity-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .quantity-row label {
+            font-size: 16px;
+        }
+
+        .quantity-row select {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 15px;
+            border: 1px solid #d2d2d7;
+        }
+
+
     </style>
 </head>
 <body>
 
 <header>
     <h1>상품 상세</h1>
-
     <nav>
         <a th:href="@{/product/list}">목록으로</a>
         <a th:href="@{/cart/list}" th:if="${loginMember != null}">장바구니</a>
     </nav>
 </header>
 
-
 <div class="container">
     <div id="toast"></div>
-    <div class="container">
-        <input type="hidden" id="productId" th:value="${product.productId}">
-        <p id="memberId"
-           th:attr="data-member-id=${loginMember != null ? loginMember.get().memberId : 0}"
-           hidden></p>
 
-        <!-- 상품 이미지 -->
+    <input type="hidden" id="productId" th:value="${product.productId}">
+    <p id="memberId" th:attr="data-member-id=${loginMember != null ? loginMember.get().memberId : 0}" hidden></p>
+
     <div class="image-box" th:if="${imagePaths != null}">
         <div th:each="path : ${imagePaths}">
             <img th:src="@{|/productImages/${path}|}" alt="상품 이미지">
         </div>
     </div>
 
-    <!-- 상품 텍스트 영역 -->
     <h2 id="productName" class="product-title" th:text="${product.productName}"></h2>
     <p class="product-price" th:text="|${product.formatProductPrice()} 원|"></p>
     <p class="product-description" th:text="${product.productDescription}"></p>
 
-
-    <!-- 구매 버튼 -->
-    <div class="buy-section" id="buyMenu">
-        <button class="apple-btn" type="button" id="buyBtn">구매하기</button>
+    <div class="review-link">
+        <a th:href="@{/}">평균 평점:
+            <span>5.0</span>
+            <span class="stars">★★★★★</span>
+        </a>
     </div>
 
-    <!-- 구매 옵션 -->
-    <form method="post" id="productMenu" hidden>
-        <label>수량 선택</label><br><br>
-        <select name="quantity" id="quantity" required>
-            <option value="">-- 선택 --</option>
-            <option th:each="i : ${#numbers.sequence(1, product.productStock)}"
-                    th:value="${i}"
-                    th:text="|${i}개|"></option>
-        </select>
-
-        <br><br>
-
-        <!-- 하트 -->
-        <div class="wishlist-heart"
-             th:classappend="${product.wishStatus} ? 'active' : 'inactive'"
-             th:attr="data-product-id=${product.productId}"
-             onclick="onClickWishBtn(event)">
-            <span th:text="${product.wishStatus} ? '♥' : '♡'"></span>
+    <div id="productMenu">
+        <div class="quantity-row">
+            <label>수량 선택</label>
+            <select name="quantity" id="quantity" required>
+                <option value="">-- 선택 --</option>
+                <option th:each="i : ${#numbers.sequence(1, product.productStock)}"
+                        th:value="${i}"
+                        th:text="|${i}개|"></option>
+            </select>
         </div>
 
-        <br>
+        <div class="wishlist-cart-row">
+            <div class="wishlist-heart" th:classappend="${product.wishStatus} ? 'active' : 'inactive'" th:attr="data-product-id=${product.productId}" onclick="onClickWishBtn(event)">
+                <span th:text="${product.wishStatus} ? '♥' : '♡'"></span>
+            </div>
 
-        <button class="apple-btn" type="button" onclick="onClickCartBtn()">장바구니 담기</button>
-    </form>
-
-
-    <!-- 관리자 전용 -->
-    <div class="admin-section"
-         th:if="${loginMember != null && loginMember.get().memberRole == 'ADMIN'}">
-        <form th:action="@{/product/delete/{productId}(productId=${product.productId})}" method="post"
-              onsubmit="return confirm('정말 삭제하시겠습니까?')">
-            <button class="apple-btn delete-btn" type="submit">상품 삭제</button>
-        </form>
+            <button class="apple-btn" type="button" onclick="onClickCartBtn()">장바구니 담기</button>
+        </div>
     </div>
-
 </div>
 
+</body>
 <script th:inline="javascript">
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const isLogin = /*[[${loginMember != null}]]*/ false;
-        const buyBtn = document.getElementById("buyBtn");
-        const productMenu = document.getElementById("productMenu");
-        const buyMenu = document.getElementById("buyMenu");
-
-        buyBtn.addEventListener("click", () => {
-            if (!isLogin) {
-                alert("로그인 후 이용해주세요.");
-                window.location.href = "/member/login";
-                return;
-            }
-
-            productMenu.hidden = !productMenu.hidden;
-            buyMenu.hidden = !buyMenu.hidden;
-        });
-    });
-
     function onClickWishBtn(e) {
         const heart = e.currentTarget;
         const productId = heart.dataset.productId;
@@ -291,10 +268,17 @@
         const productName = document.getElementById("productName")?.innerText || '';
         const memberId = document.getElementById("memberId").dataset.memberId;
         const quantity = document.getElementById("quantity").value;
+        const isLogin = /*[[${loginMember != null}]]*/ false;
 
-        if (!quantity) {
-            alert("수량을 선택해주세요!");
+
+        if (!isLogin) {
+            alert("로그인 후 이용해주세요.");
+            window.location.href = "/member/login";
             return;
+        }
+        if (!quantity) {
+        alert("수량을 선택해주세요!");
+        return;
         }
 
         if (!confirm(`'${productName}' 상품을 ${quantity}개 장바구니에 추가하시겠습니까?`)) return;
@@ -324,5 +308,4 @@
 
 </script>
 
-</body>
 </html>

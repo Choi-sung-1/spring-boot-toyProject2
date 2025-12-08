@@ -1,4 +1,4 @@
-package com.project.toyProject2.service;
+package com.project.toyProject2.service.cart;
 
 import com.project.toyProject2.domain.dto.cart.CartAddDTO;
 import com.project.toyProject2.domain.dto.cart.CartListDTO;

@@ -1,4 +1,4 @@
-package com.project.toyProject2.service;
+package com.project.toyProject2.service.member;
 
 import com.project.toyProject2.domain.vo.MemberVO;
 import com.project.toyProject2.repository.MemberDAO;

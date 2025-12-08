@@ -1,4 +1,4 @@
-package com.project.toyProject2.service;
+package com.project.toyProject2.service.order;
 
 import com.project.toyProject2.domain.dto.order.OrderPaymentDTO;
 import com.project.toyProject2.domain.dto.order.OrderRequestDTO;

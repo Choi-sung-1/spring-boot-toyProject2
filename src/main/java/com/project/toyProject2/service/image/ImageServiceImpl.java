@@ -1,4 +1,4 @@
-package com.project.toyProject2.service;
+package com.project.toyProject2.service.image;
 
 import com.project.toyProject2.domain.vo.ImageVO;
 import com.project.toyProject2.repository.ImageDAO;

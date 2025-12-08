@@ -1,4 +1,4 @@
-package com.project.toyProject2.service;
+package com.project.toyProject2.service.wishLIst;
 
 import com.project.toyProject2.domain.dto.wishList.WishListPageDTO;
 import com.project.toyProject2.domain.vo.WishListVO;

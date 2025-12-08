@@ -1,4 +1,4 @@
-package com.project.toyProject2.service;
+package com.project.toyProject2.service.product;
 import com.project.toyProject2.domain.dto.product.ProductDetailDTO;
 import com.project.toyProject2.domain.dto.product.ProductListDTO;
 import com.project.toyProject2.domain.dto.product.ProductListRequestDTO;

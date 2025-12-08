@@ -1,6 +1,6 @@
 package com.project.toyProject2.controller;
 
-import com.project.toyProject2.service.MemberService;
+import com.project.toyProject2.service.member.MemberService;
 import com.project.toyProject2.domain.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
