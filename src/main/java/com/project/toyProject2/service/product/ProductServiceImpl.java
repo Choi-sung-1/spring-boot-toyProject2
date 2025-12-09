@@ -55,7 +55,6 @@ public class ProductServiceImpl implements ProductService {
                 image.setImagePath(uuid+"_"+filePath);
                 image.setImageType("PRODUCT");
                 image.setProductId(productVO.getProductId());
-
                 index++;
                 imageDAO.insert(image);
             }

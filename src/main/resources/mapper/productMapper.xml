@@ -20,7 +20,6 @@
                 AND TP.PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%')
             </if>
         </where>
-
         <choose>
             <when test="sort == 'readCount'">
                 ORDER BY TP.PRODUCT_READ_COUNT DESC
