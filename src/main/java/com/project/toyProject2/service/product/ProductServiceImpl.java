@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
                 image.setMainImage(index == 0 ? "Y":"N");
                 image.setImagePath(uuid+"_"+filePath);
                 image.setImageType("PRODUCT");
-                image.setProductId(productVO.getProductId());
+                image.setReferenceId(productVO.getProductId());
                 index++;
                 imageDAO.insert(image);
             }
@@ -98,8 +98,8 @@ public class ProductServiceImpl implements ProductService {
 
     //    상품 삭제
     @Override
-    public void deleteProduct(Long id) {
-        imageDAO.delete(id);
-        productDAO.deleteProductById(id);
+    public void deleteProduct(Long productId) {
+        imageDAO.delete("PRODUCT",productId);
+        productDAO.deleteProductById(productId);
     }
 }

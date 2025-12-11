@@ -80,13 +80,13 @@ public class ProductController {
             SecurityContext context = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
             MemberVO loginMember = memberService.findMember(context.getAuthentication().getName()).get();
             model.addAttribute("loginMember", loginMember);
-            model.addAttribute("imagePaths", imageService.findImagePaths(productId));
+            model.addAttribute("imagePaths", imageService.findImagePaths("PRODUCT",productId));
             productService.updateReadCount(productId);
             model.addAttribute("product", productService.productDetailPage(productId, loginMember.getMemberId()));
             return "product/productDetail";
 
         }else {
-            model.addAttribute("imagePaths", imageService.findImagePaths(productId));
+            model.addAttribute("imagePaths", imageService.findImagePaths("PRODUCT",productId));
             productService.updateReadCount(productId);
             model.addAttribute("product", productService.productDetailPage(productId, null));
             return "product/productDetail";

@@ -15,8 +15,8 @@ import java.util.List;
 public class ImageServiceImpl implements ImageService {
     private final ImageDAO imageDAO;
     @Override
-    public List<String> findImagePaths(Long productId) {
-        List<ImageVO> images = imageDAO.findImages(productId);
+    public List<String> findImagePaths(String imageType,Long referenceId) {
+        List<ImageVO> images = imageDAO.findImages(imageType,referenceId);
         List<String> imagePaths = new ArrayList<>();
 
         for (ImageVO image : images) {

@@ -15,10 +15,10 @@ public class ImageDAO {
     public void insert(ImageVO imageVO) {
         imageMapper.insert(imageVO);
     }
-    public List<ImageVO> findImages(Long productId){
-        return imageMapper.selectImages(productId);
+    public List<ImageVO> findImages(String imageType,Long referenceId){
+        return imageMapper.selectImages(imageType,referenceId);
     }
-    public void delete(Long productId){
-        imageMapper.delete(productId);
+    public void delete(String imageType, Long referenceId){
+        imageMapper.delete(imageType,referenceId);
     }
 }

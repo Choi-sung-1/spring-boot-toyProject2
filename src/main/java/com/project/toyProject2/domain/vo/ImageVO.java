@@ -8,6 +8,6 @@ public class ImageVO {
     private String imageOriginalName;
     private String imagePath;
     private String imageType;
-    private Long productId;
+    private Long referenceId;
     private String mainImage;
 }

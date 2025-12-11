@@ -13,8 +13,8 @@
         SELECT TP.PRODUCT_ID, TP.PRODUCT_NAME, TP.PRODUCT_PRICE,
         TP.PRODUCT_READ_COUNT, TP.PRODUCT_CREATE_DATE, TI.IMAGE_ORIGINAL_NAME
         FROM TBL_IMAGES TI
-            INNER JOIN TBL_PRODUCT TP ON TP.PRODUCT_ID = TI.PRODUCT_ID
-                AND TI.MAIN_IMAGE = 'Y'
+            INNER JOIN TBL_PRODUCT TP ON TP.PRODUCT_ID = TI.REFERENCE_ID
+                AND TI.IMAGE_TYPE = 'PRODUCT'AND TI.MAIN_IMAGE = 'Y'
         <where>
             <if test="keyword != null and keyword != ''">
                 AND TP.PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%')

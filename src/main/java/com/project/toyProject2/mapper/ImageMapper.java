@@ -8,6 +8,6 @@ import java.util.List;
 @Mapper
 public interface ImageMapper {
     public void insert(ImageVO imageVO);
-    public List<ImageVO> selectImages(Long productId);
-    public void delete(Long productId);
+    public List<ImageVO> selectImages(String imageType,Long referenceId);
+    public void delete(String imageType,Long referenceId);
 }
