@@ -78,11 +78,11 @@ public class ProductController {
     public String detail(@PathVariable("productId")Long productId, Model model,HttpSession session) {
         if (session.getAttribute("SPRING_SECURITY_CONTEXT")!=null){
             SecurityContext context = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
-            Optional<MemberVO> loginMember = memberService.findMember(context.getAuthentication().getName());
+            MemberVO loginMember = memberService.findMember(context.getAuthentication().getName()).get();
             model.addAttribute("loginMember", loginMember);
             model.addAttribute("imagePaths", imageService.findImagePaths(productId));
             productService.updateReadCount(productId);
-            model.addAttribute("product", productService.productDetailPage(productId, loginMember.get().getMemberId()));
+            model.addAttribute("product", productService.productDetailPage(productId, loginMember.getMemberId()));
             return "product/productDetail";
 
         }else {
@@ -92,7 +92,7 @@ public class ProductController {
             return "product/productDetail";
         }
     }
-    @PostMapping("/delete/{productId}")
+    @GetMapping("/delete/{productId}")
     public String delete(@PathVariable Long productId) {
         productService.deleteProduct(productId);
         return "redirect:/product/list";

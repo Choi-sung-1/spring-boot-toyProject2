@@ -181,6 +181,12 @@
 <header>
     <h1>상품 상세</h1>
     <nav>
+        <a style="color:red"
+           th:if="${loginMember != null and loginMember.memberRole == 'ADMIN'}"
+           onclick="return onClickDeleteBtn()"
+           th:href="@{/product/delete/{productId}(productId=${product.productId})}">
+            상품 삭제
+        </a>
         <a th:href="@{/product/list}">목록으로</a>
         <a th:href="@{/cart/list}" th:if="${loginMember != null}">장바구니</a>
     </nav>
@@ -190,7 +196,7 @@
     <div id="toast"></div>
 
     <input type="hidden" id="productId" th:value="${product.productId}">
-    <p id="memberId" th:attr="data-member-id=${loginMember != null ? loginMember.get().memberId : 0}" hidden></p>
+    <p id="memberId" th:attr="data-member-id=${loginMember != null ? loginMember.memberId : 0}" hidden></p>
 
     <div class="image-box" th:if="${imagePaths != null}">
         <div th:each="path : ${imagePaths}">
@@ -261,6 +267,13 @@
             });
     }
 
+    // 상품 삭제 버튼
+    function onClickDeleteBtn() {
+        if(!confirm("해당 상품을 삭제하시겠습니까?")){
+            return false;
+        }
+        return true;
+    }
 
     // 🛒 장바구니 추가
     function onClickCartBtn() {

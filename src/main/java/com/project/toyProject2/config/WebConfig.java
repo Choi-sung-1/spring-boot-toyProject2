@@ -45,7 +45,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                             String targetUrl = savedRequest.getRedirectUrl();
                             response.sendRedirect(targetUrl);
                         } else {
-                            response.sendRedirect("/");
+                            response.sendRedirect("/product/list");
                         }
                     })
             )
