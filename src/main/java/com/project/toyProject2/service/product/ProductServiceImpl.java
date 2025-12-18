@@ -8,6 +8,7 @@ import com.project.toyProject2.domain.vo.ProductVO;
 import com.project.toyProject2.domain.vo.WishListVO;
 import com.project.toyProject2.repository.ImageDAO;
 import com.project.toyProject2.repository.ProductDAO;
+import com.project.toyProject2.repository.ReviewDAO;
 import com.project.toyProject2.repository.WishListDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,9 @@ public class ProductServiceImpl implements ProductService {
     private final ProductDAO productDAO;
     private final ImageDAO imageDAO;
     private final WishListDAO wishListDAO;
-//    상품 등록
+    private final ReviewDAO reviewDAO;
+
+    //    상품 등록
     @Override
     public void saveProduct(ProductVO productVO, MultipartFile[] files) {
         productDAO.insertProduct(productVO);
@@ -71,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
         productDetailDTO.setProductDescription(productVO.getProductDescription());
         productDetailDTO.setProductPrice(productVO.getProductPrice());
         productDetailDTO.setProductStock(productVO.getProductStock());
-
+        productDetailDTO.setReviewRatingAvg(reviewDAO.selectRatingAvg(productId));
         WishListVO findProduct = wishListDAO.selectWishProductById(memberId,productId);
             if(findProduct==null) {
                 productDetailDTO.setWishStatus(false);
@@ -80,7 +83,13 @@ public class ProductServiceImpl implements ProductService {
             }
         return productDetailDTO;
     }
-//    전체 상품 조회
+
+    @Override
+    public ProductVO findProductByPk(Long productId) {
+        return productDAO.selectProductById(productId);
+    }
+
+    //    전체 상품 조회
     @Override
     public List<ProductListDTO> findAllProduct(ProductListRequestDTO productListRequestDTO) {
         return productDAO.selectAllProducts(productListRequestDTO);

@@ -10,8 +10,10 @@ import java.util.List;
 public interface ProductService {
 //    상품 등록
     public void saveProduct(ProductVO productVO, MultipartFile[] files);
-//    상품 조회
+//    상세 상품 조회
     public ProductDetailDTO productDetailPage(Long productId,Long memberId);
+//    상세 상품 정보 조회
+    public ProductVO findProductByPk(Long productId);
 //    상품 전체 조회
     public List<ProductListDTO> findAllProduct(ProductListRequestDTO productListRequestDTO);
 //    상품 업데이트

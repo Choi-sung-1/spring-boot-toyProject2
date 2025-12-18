@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.toyProject2.mapper.ReviewMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="reviewId">
+        INSERT  INTO TBL_REVIEW (MEMBER_ID, PRODUCT_ID, REVIEW_TITLE, REVIEW_CONTENT, REVIEW_RATING)
+        VALUES (#{memberId},#{productId},#{reviewTitle},#{reviewContent},#{reviewRating} )
+    </insert>
+    <select id="selectAll">
+        SELECT TM.MEMBER_LOGIN_ID,TR.REVIEW_RATING,TR.REVIEW_TITLE,TR.REVIEW_CONTENT,TR.REVIEW_CREATE_DATE
+        FROM TBL_REVIEW TR
+                 INNER JOIN TBL_MEMBER TM ON TR.MEMBER_ID = TM.MEMBER_ID
+        WHERE TR.PRODUCT_ID = #{productId}
+    </select>
+    <select id="selectRatingAvg">
+        SELECT AVG(REVIEW_RATING)  FROM TBL_REVIEW
+        WHERE PRODUCT_ID = #{productId}
+    </select>
+</mapper>

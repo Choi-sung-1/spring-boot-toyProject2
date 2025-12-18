@@ -107,6 +107,7 @@
 
 <h1>찜한 상품</h1>
 <div id="toast"></div>
+<div th:if="${wishList.isEmpty()}"><h2>찜한 상품이 없습니다.</h2></div>
 <div class="wishlist-grid">
 
     <div class="wishlist-card" th:each="wish : ${wishList}">

@@ -103,13 +103,12 @@
             <th>결제 금액</th>
             <th>상태</th>
             <th>상세보기</th>
-            <th>리뷰</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:if="!${orderList.isEmpty()}" th:each="order:${orderList}">
-            <td th:text="${order.orderId}"></td>
+        <tr th:if="!${orderList.isEmpty()}" th:each="order,stat:${orderList}">
+            <td th:text="${stat.index+1}"></td>
             <td th:text="${order.orderSummary}"></td>
             <td th:text="${order.formatOrderDate()}"></td>
             <td th:text="|${order.formatOrderTotalPayment()}원|"></td>
@@ -117,16 +116,6 @@
 
             <td class="detail-btn">
                 <a th:href="@{/order/orderDetail/{orderId}(orderId=${order.orderId})}">보기</a>
-            </td>
-            <td class="detail-btn">
-                <a th:if="${order.orderStatus}=='배송 완료'"
-                   th:href="@{/review/write/{orderId}(orderId=${order.orderId})}">
-                    리뷰 작성
-                </a>
-
-                <span th:unless="${order.orderStatus}=='배송 완료'" style="color:#aaa;">
-            -
-        </span>
             </td>
         </tr>
 

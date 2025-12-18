@@ -13,6 +13,7 @@ public class ProductDetailDTO {
     private Integer productPrice;
     private Integer productStock;
     private Boolean wishStatus;
+    private Double reviewRatingAvg;
     public String formatProductPrice(){
         NumberFormat format = NumberFormat.getCurrencyInstance(Locale.KOREA);
         return format.format(productPrice);

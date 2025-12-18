@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 리뷰</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            background: #f2f4f6;
+            color: #1d1d1f;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        /* 상품 정보 */
+        .product-header {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .product-header img {
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .product-desc {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* 리뷰 카드 */
+        .review-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        }
+
+        .review-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .review-user {
+            font-weight: 500;
+        }
+
+        .review-date {
+            font-size: 13px;
+            color: #777;
+        }
+
+        /* 별점 */
+        .stars {
+            color: #ffb400;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .review-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .review-content {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        /* 이미지 리스트 */
+        .review-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .review-images img {
+            width: 110px;
+            height: 110px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        /* 리뷰 없음 */
+        .empty {
+            background: #fff;
+            padding: 60px 20px;
+            border-radius: 14px;
+            text-align: center;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>상품 리뷰</h2>
+
+    <!-- 상품 정보 -->
+    <div class="product-header">
+        <img th:src="@{|/productImages/${productImage}|}" alt="상품 이미지">
+        <div>
+            <div class="product-name" th:text="${product.productName}"></div>
+            <div class="product-desc" th:text="${product.productDescription}">가볍고 쿠션감 좋은 러닝화</div>
+        </div>
+    </div>
+
+    <div class="review-card" th:each="review :${reviewList}">
+        <div class="review-top">
+            <div class="review-user" th:text="*{review.memberLoginId}">성***</div>
+            <div class="review-date" th:text="*{review.getFormatReviewDate()}">2025.03.01</div>
+        </div>
+
+        <div class="stars"
+             th:text="${'★'.repeat(review.reviewRating)} + ${'☆'.repeat(5 - review.reviewRating)}">
+        </div>
+        <div class="review-title" th:text="*{review.reviewTitle}">착용감이 정말 좋아요</div>
+        <div class="review-content" th:text="*{review.reviewContent}">
+            발이 편하고 쿠션이 좋아서 장시간 러닝해도 무리가 없습니다.
+        </div>
+    </div>
+
+    <div class="empty" th:if="${reviewList.isEmpty()}">
+        아직 등록된 리뷰가 없습니다.
+    </div>
+
+</div>
+
+</body>
+<script>
+
+</script>
+</html>

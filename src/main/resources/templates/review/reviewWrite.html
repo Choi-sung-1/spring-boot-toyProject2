@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰 작성</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            background: #f2f4f6;
+            color: #1d1d1f;
+        }
+
+        .review-container {
+            max-width: 760px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            margin-bottom: 24px;
+        }
+
+        /* 상품 정보 */
+        .product-info {
+            display: flex;
+            gap: 16px;
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 28px;
+        }
+
+        .product-info img {
+            width: 96px;
+            height: 96px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .product-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .field {
+            margin-bottom: 22px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        /* 별점 */
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            font-size: 36px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffb400;
+        }
+
+        .rating-text {
+            font-size: 14px;
+            margin-top: 6px;
+            color: #555;
+        }
+
+        .error {
+            display: none;
+            font-size: 13px;
+            color: #e74c3c;
+            margin-top: 6px;
+        }
+
+        /* 사진 업로드 */
+        .upload-box {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 18px;
+            background: #fafafa;
+        }
+
+        .upload-guide {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .preview {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .preview img {
+            width: 90px;
+            height: 90px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        /* 버튼 */
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            margin-top: 34px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            background: #007aff;
+            color: #fff;
+        }
+
+        .btn-cancel {
+            background: #e5e7eb;
+        }
+
+        .btn-submit:hover {
+            background: #005fcc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="review-container">
+    <h2>리뷰 작성</h2>
+
+    <!-- 상품 정보 -->
+    <div class="product-info">
+        <img th:src="@{|/productImages/${imagePaths}|}" alt="상품 이미지">
+        <div>
+            <div th:text="${product.productName}" class="product-name"></div>
+            <div th:text="${product.productDescription}" class="product-desc">가볍고 쿠션감 좋은 러닝화</div>
+        </div>
+    </div>
+
+    <!-- 리뷰 작성 폼 -->
+    <form id="reviewForm"
+          th:object="${reviewVO}"
+          th:action="@{/review/write/{productId}(productId=${product.productId})}"
+          onsubmit="return validateStarRating()"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{productId}"
+               th:value="${product.productId}">
+        <!-- 리뷰 제목 -->
+        <div class="field">
+            <input type="text"
+                   th:field="*{reviewTitle}"
+                   placeholder="리뷰 제목을 입력하세요"
+                   required>
+        </div>
+
+        <!-- 리뷰 내용 -->
+        <div class="field">
+        <textarea th:field="*{reviewContent}"
+                  placeholder="상품을 사용해본 솔직한 후기를 작성해주세요 (최대 500자)"
+                  maxlength="500"
+                  required></textarea>
+        </div>
+
+        <!-- 별점 -->
+        <div class="field">
+            <div class="star-rating">
+                <input type="radio" id="star5"  name="reviewRating" th:field="*{reviewRating}" value="5">
+                <label for="star5">★</label>
+
+                <input type="radio" id="star4"  name="reviewRating" th:field="*{reviewRating}" value="4">
+                <label for="star4">★</label>
+
+                <input type="radio" id="star3"  name="reviewRating" th:field="*{reviewRating}" value="3">
+                <label for="star3">★</label>
+
+                <input type="radio" id="star2"  name="reviewRating" th:field="*{reviewRating}" value="2">
+                <label for="star2">★</label>
+
+                <input type="radio" id="star1"  name="reviewRating" th:field="*{reviewRating}" value="1">
+                <label for="star1">★</label>
+            </div>
+            <input type="checkbox" id="ratingCheckBox" hidden="hidden">
+            <div class="rating-text" id="ratingText">별점을 선택해주세요</div>
+        </div>
+        <!-- 버튼 -->
+        <div class="btn-group">
+            <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+            <button type="submit" class="btn-submit" onclick="validateStarRating()">리뷰 등록</button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+    /* 별점 텍스트 */
+    const ratingText = document.getElementById('ratingText');
+    const ratingCheckBox = document.getElementById('ratingCheckBox');
+    const ratingMap = {
+        5: '매우 만족',
+        4: '만족',
+        3: '보통',
+        2: '불만족',
+        1: '매우 불만족'
+    };
+
+    document.querySelectorAll('.star-rating input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            ratingText.textContent = ratingMap[radio.value];
+            ratingCheckBox.checked = true;
+        });
+    });
+    function validateStarRating(){
+        if (ratingCheckBox.checked===false){
+            alert('별점을 선택해주세요.');
+            return false;
+        }
+        return true;
+    }
+
+</script>
+
+</body>
+</html>

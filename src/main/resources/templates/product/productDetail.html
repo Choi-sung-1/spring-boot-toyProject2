@@ -172,6 +172,11 @@
             font-size: 15px;
             border: 1px solid #d2d2d7;
         }
+        .avg-rating-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
 
 
     </style>
@@ -209,11 +214,21 @@
     <p class="product-description" th:text="${product.productDescription}"></p>
 
     <div class="review-link">
-        <a th:href="@{/}">평균 평점:
-            <span>5.0</span>
-            <span class="stars">★★★★★</span>
+        <a th:href="@{/review/list/{productId}(productId=${product.productId})}">
+            평균 평점:
+            <span class="avg-rating-row" th:if="${product.reviewRatingAvg}">
+            <span th:text="${product.reviewRatingAvg}">5.0</span>
+            <span class="stars"
+                  th:text="${'★'.repeat(product.reviewRatingAvg)} + ${'☆'.repeat(5 - product.reviewRatingAvg)}">
+                ★★★★★
+            </span>
+        </span>
+            <span class="avg-rating-row" th:unless="${product.reviewRatingAvg}">
+            0.0
+        </span>
         </a>
     </div>
+
 
     <div id="productMenu">
         <div class="quantity-row">
