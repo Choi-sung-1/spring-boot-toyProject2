@@ -21,4 +21,6 @@ public interface ProductMapper {
     public void updateReadCount(Long productId);
 //    상품 삭제
     public void delete(Long productId);
+//    상품 개수 조회
+    public Integer selectProductCount(String keyword);
 }

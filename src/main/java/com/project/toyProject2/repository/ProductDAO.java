@@ -38,4 +38,8 @@ public class ProductDAO {
     public void deleteProductById(Long id) {
         productMapper.delete(id);
     }
+//    상품 개수 조회
+    public Integer selectProductCount(String keyword){
+        return productMapper.selectProductCount(keyword);
+    }
 }

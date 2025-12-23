@@ -178,6 +178,52 @@
         #toast.show {
             opacity: 1;
         }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 28px 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        nav ul li a {
+            display: block;
+            padding: 6px 10px;
+            min-width: 32px;
+            text-align: center;
+
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+
+            color: #333;
+            background: #fff;
+
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        /* Hover 시 */
+        nav ul li a:hover {
+            background: #2d6df6;
+            color: white;
+            border-color: #2d6df6;
+        }
+
+        /* 현재 페이지 강조 */
+        nav ul li a.current {
+            background: #2d6df6;
+            color: #fff;
+            border-color: #2d6df6;
+            font-weight: 600;
+        }
+
+        /* 이전 / 다음 버튼 */
+        nav ul li a.prev-next {
+            padding: 6px 14px;
+        }
+
     </style>
 </head>
 
@@ -243,6 +289,31 @@
         </a>
     </div>
 </div>
+<nav th:object="${productListRequestDTO}">
+    <ul>
+        <li th:if="*{currentPage > 1}">
+            <a class="prev-next"
+               th:href="@{/product/list(currentPage=*{currentPage - 1},sort = *{sort})}">
+                이전
+            </a>
+        </li>
+
+        <!-- 페이지 번호들 -->
+        <li th:each="i : *{#numbers.sequence(startPage, endPage)}">
+            <a th:href="@{/product/list(currentPage=${i}, sort=*{sort})}"
+               th:text="${i}"
+               th:classappend="${i} == (*{currentPage} ? 'current' :'')">
+            </a>
+        </li>
+        <li th:if="*{currentPage < totalPage}">
+            <a class="prev-next"
+               th:href="@{/product/list(currentPage=*{currentPage + 1},sort=*{sort})}">
+                다음
+            </a>
+        </li>
+
+    </ul>
+</nav>
 
 </body>
 

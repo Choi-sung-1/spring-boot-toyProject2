@@ -41,6 +41,7 @@
                 ORDER BY TP.PRODUCT_ID DESC
             </otherwise>
         </choose>
+        LIMIT #{startRow}, #{pageSize}
     </select>
 
     <update id="update">
@@ -56,5 +57,12 @@
     <delete id="delete">
         DELETE FROM TBL_PRODUCT WHERE PRODUCT_ID=#{productID}
     </delete>
-
+    <select id="selectProductCount">
+        SELECT COUNT(*) FROM TBL_PRODUCT
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
 </mapper>

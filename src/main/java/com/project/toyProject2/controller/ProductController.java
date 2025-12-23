@@ -31,7 +31,8 @@ public class ProductController {
     private final ProductService productService;
     private final MemberService memberService;
     private final WishListService wishListService;
-
+//    한 페이지당 제품 수
+    public final static Integer PAGE_SIZE = 10;
     @GetMapping("/list")
     public String list(Model model, HttpSession session,
                        ProductListRequestDTO productListRequestDTO) {
@@ -41,8 +42,8 @@ public class ProductController {
             Optional<MemberVO> loginMember = memberService.findMember(context.getAuthentication().getName());
             model.addAttribute("loginMember", loginMember);
 
-
             List<ProductListDTO> productList = productService.findAllProduct(productListRequestDTO);
+
             for (ProductListDTO productListDTO : productList) {
                 Long productId = productListDTO.getProductId();
                 WishListVO findProduct = wishListService.findWishProductById(loginMember.get().getMemberId(), productId);
@@ -53,6 +54,7 @@ public class ProductController {
                 }
             }
             model.addAttribute("productList", productList);
+
             model.addAttribute("productListRequestDTO", productListRequestDTO);
             return "product/productList";
         }else {
