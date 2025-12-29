@@ -11,6 +11,7 @@ import com.project.toyProject2.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -42,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
         return orderPaymentDTO;
     }
 
+    @Transactional
     @Override
     public void saveOrder(OrderRequestDTO orderRequestDTO) {
         MemberVO member = memberDAO.selectMemberById(orderRequestDTO.getMemberLoginId()).get();

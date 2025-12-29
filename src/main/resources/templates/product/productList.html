@@ -302,7 +302,7 @@
         <li th:each="i : *{#numbers.sequence(startPage, endPage)}">
             <a th:href="@{/product/list(currentPage=${i}, sort=*{sort})}"
                th:text="${i}"
-               th:classappend="${i} == (*{currentPage} ? 'current' :'')">
+               th:classappend="${i} == (*{currentPage} ? 'current' : '')">
             </a>
         </li>
         <li th:if="*{currentPage < totalPage}">
